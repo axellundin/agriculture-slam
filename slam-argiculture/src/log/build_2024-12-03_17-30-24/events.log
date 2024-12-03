@@ -1,0 +1,412 @@
+[0.000000] (-) TimerEvent: {}
+[0.001616] (debug_tools) JobQueued: {'identifier': 'debug_tools', 'dependencies': OrderedDict()}
+[0.002265] (velodyne_laserscan) JobQueued: {'identifier': 'velodyne_laserscan', 'dependencies': OrderedDict()}
+[0.003392] (velodyne_msgs) JobQueued: {'identifier': 'velodyne_msgs', 'dependencies': OrderedDict()}
+[0.004603] (velodyne_driver) JobQueued: {'identifier': 'velodyne_driver', 'dependencies': OrderedDict({'velodyne_msgs': '/ros/install/velodyne_msgs'})}
+[0.005652] (velodyne_pointcloud) JobQueued: {'identifier': 'velodyne_pointcloud', 'dependencies': OrderedDict({'velodyne_msgs': '/ros/install/velodyne_msgs'})}
+[0.007186] (velodyne) JobQueued: {'identifier': 'velodyne', 'dependencies': OrderedDict({'velodyne_laserscan': '/ros/install/velodyne_laserscan', 'velodyne_msgs': '/ros/install/velodyne_msgs', 'velodyne_driver': '/ros/install/velodyne_driver', 'velodyne_pointcloud': '/ros/install/velodyne_pointcloud'})}
+[0.008235] (velodyne_msgs) JobStarted: {'identifier': 'velodyne_msgs'}
+[0.015863] (velodyne_laserscan) JobStarted: {'identifier': 'velodyne_laserscan'}
+[0.027423] (debug_tools) JobStarted: {'identifier': 'debug_tools'}
+[0.063059] (velodyne_msgs) JobProgress: {'identifier': 'velodyne_msgs', 'progress': 'cmake'}
+[0.072221] (velodyne_msgs) JobProgress: {'identifier': 'velodyne_msgs', 'progress': 'build'}
+[0.073496] (velodyne_msgs) Command: {'cmd': ['/usr/bin/cmake', '--build', '/ros/build/velodyne_msgs', '--', '-j4', '-l4'], 'cwd': '/ros/build/velodyne_msgs', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_msgs', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/rolling'}), 'shell': False}
+[0.098094] (-) TimerEvent: {}
+[0.099413] (velodyne_laserscan) JobProgress: {'identifier': 'velodyne_laserscan', 'progress': 'cmake'}
+[0.102552] (velodyne_laserscan) JobProgress: {'identifier': 'velodyne_laserscan', 'progress': 'build'}
+[0.103932] (velodyne_laserscan) Command: {'cmd': ['/usr/bin/cmake', '--build', '/ros/build/velodyne_laserscan', '--', '-j4', '-l4'], 'cwd': '/ros/build/velodyne_laserscan', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_laserscan', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/rolling'}), 'shell': False}
+[0.198212] (-) TimerEvent: {}
+[0.224325] (velodyne_msgs) StdoutLine: {'line': b'[  2%] Built target velodyne_msgs__rosidl_generator_type_description\n'}
+[0.297622] (velodyne_msgs) StdoutLine: {'line': b'[  4%] Built target velodyne_msgs__cpp\n'}
+[0.304701] (-) TimerEvent: {}
+[0.306090] (velodyne_laserscan) StdoutLine: {'line': b'[ 50%] Built target velodyne_laserscan\n'}
+[0.362876] (velodyne_msgs) StdoutLine: {'line': b'[ 22%] Built target velodyne_msgs__rosidl_generator_c\n'}
+[0.404800] (-) TimerEvent: {}
+[0.408839] (velodyne_laserscan) StdoutLine: {'line': b'[100%] Built target velodyne_laserscan_node\n'}
+[0.479252] (velodyne_laserscan) CommandEnded: {'returncode': 0}
+[0.485763] (velodyne_msgs) StdoutLine: {'line': b'[ 31%] Built target velodyne_msgs__rosidl_typesupport_fastrtps_cpp\n'}
+[0.504898] (-) TimerEvent: {}
+[0.525984] (velodyne_msgs) StdoutLine: {'line': b'[ 50%] Built target velodyne_msgs__rosidl_typesupport_fastrtps_c\n'}
+[0.531032] (velodyne_msgs) StdoutLine: {'line': b'[ 50%] Built target velodyne_msgs__rosidl_typesupport_cpp\n'}
+[0.573476] (velodyne_msgs) StdoutLine: {'line': b'[ 50%] Built target ament_cmake_python_copy_velodyne_msgs\n'}
+[0.596744] (velodyne_laserscan) JobProgress: {'identifier': 'velodyne_laserscan', 'progress': 'install'}
+[0.605435] (-) TimerEvent: {}
+[0.610667] (velodyne_msgs) StdoutLine: {'line': b'[ 59%] Built target velodyne_msgs__rosidl_typesupport_introspection_c\n'}
+[0.623119] (velodyne_laserscan) Command: {'cmd': ['/usr/bin/cmake', '--install', '/ros/build/velodyne_laserscan'], 'cwd': '/ros/build/velodyne_laserscan', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_laserscan', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/rolling'}), 'shell': False}
+[0.653329] (velodyne_msgs) StdoutLine: {'line': b'[ 75%] Built target velodyne_msgs__rosidl_typesupport_c\n'}
+[0.661083] (velodyne_laserscan) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[0.667528] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/lib/libvelodyne_laserscan.so\n'}
+[0.671622] (velodyne_msgs) StdoutLine: {'line': b'[ 77%] Built target velodyne_msgs__rosidl_typesupport_introspection_cpp\n'}
+[0.675770] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/lib/velodyne_laserscan/velodyne_laserscan_node\n'}
+[0.681091] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/include/velodyne_laserscan\n'}
+[0.684687] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/include/velodyne_laserscan/velodyne_laserscan.hpp\n'}
+[0.688175] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/config\n'}
+[0.692696] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/config/default-velodyne_laserscan_node-params.yaml\n'}
+[0.698808] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/launch\n'}
+[0.707115] (-) TimerEvent: {}
+[0.708634] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/launch/velodyne_laserscan_node-composed-launch.py\n'}
+[0.712899] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/launch/velodyne_laserscan_node-launch.py\n'}
+[0.718061] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/ament_index/resource_index/package_run_dependencies/velodyne_laserscan\n'}
+[0.722602] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/ament_index/resource_index/parent_prefix_path/velodyne_laserscan\n'}
+[0.727713] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/environment/ament_prefix_path.sh\n'}
+[0.735721] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/environment/ament_prefix_path.dsv\n'}
+[0.741133] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/environment/path.sh\n'}
+[0.746677] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/environment/path.dsv\n'}
+[0.752295] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/local_setup.bash\n'}
+[0.757948] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/local_setup.sh\n'}
+[0.762732] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/local_setup.zsh\n'}
+[0.768407] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/local_setup.dsv\n'}
+[0.773707] (velodyne_laserscan) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_laserscan/share/velodyne_laserscan/package.dsv\n'}
+[0.780649] (velodyne_msgs) StdoutLine: {'line': b'[ 77%] Built target velodyne_msgs\n'}
+[0.784525] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/ament_index/resource_index/packages/velodyne_laserscan\n'}
+[0.792910] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/ament_index/resource_index/rclcpp_components/velodyne_laserscan\n'}
+[0.798482] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/velodyne_laserscanExport.cmake\n'}
+[0.802742] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/velodyne_laserscanExport-noconfig.cmake\n'}
+[0.807816] (-) TimerEvent: {}
+[0.809168] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[0.814126] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[0.822566] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[0.830112] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/velodyne_laserscanConfig.cmake\n'}
+[0.834961] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/cmake/velodyne_laserscanConfig-version.cmake\n'}
+[0.839832] (velodyne_laserscan) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_laserscan/share/velodyne_laserscan/package.xml\n'}
+[0.844080] (velodyne_laserscan) CommandEnded: {'returncode': 0}
+[0.850979] (velodyne_msgs) StdoutLine: {'line': b'[ 79%] Built target velodyne_msgs__py\n'}
+[0.855095] (velodyne_msgs) StdoutLine: {'line': b'running egg_info\n'}
+[0.866257] (velodyne_msgs) StdoutLine: {'line': b'writing velodyne_msgs.egg-info/PKG-INFO\n'}
+[0.871794] (velodyne_msgs) StdoutLine: {'line': b'writing dependency_links to velodyne_msgs.egg-info/dependency_links.txt\n'}
+[0.888124] (velodyne_msgs) StdoutLine: {'line': b'writing top-level names to velodyne_msgs.egg-info/top_level.txt\n'}
+[0.908432] (-) TimerEvent: {}
+[0.924818] (velodyne_msgs) StdoutLine: {'line': b'[ 86%] Built target velodyne_msgs__rosidl_generator_py\n'}
+[0.951567] (velodyne_msgs) StdoutLine: {'line': b"reading manifest file 'velodyne_msgs.egg-info/SOURCES.txt'\n"}
+[0.963477] (velodyne_msgs) StdoutLine: {'line': b"writing manifest file 'velodyne_msgs.egg-info/SOURCES.txt'\n"}
+[0.984619] (debug_tools) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../build/debug_tools', 'build', '--build-base', '/ros/build/debug_tools/build', 'install', '--record', '/ros/build/debug_tools/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/ros/debug_tools', 'env': {'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/debug_tools', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/ros/build/debug_tools/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/ros/install/debug_tools/lib/python3.12/site-packages:/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1'}, 'shell': False}
+[1.040252] (-) TimerEvent: {}
+[1.043852] (velodyne_msgs) StdoutLine: {'line': b'[ 93%] Built target velodyne_msgs_s__rosidl_typesupport_introspection_c\n'}
+[1.051922] (velodyne_msgs) StdoutLine: {'line': b'[ 95%] Built target ament_cmake_python_build_velodyne_msgs_egg\n'}
+[1.058017] (velodyne_msgs) StdoutLine: {'line': b'[ 95%] Built target velodyne_msgs_s__rosidl_typesupport_fastrtps_c\n'}
+[1.069085] (velodyne_msgs) StdoutLine: {'line': b'[100%] Built target velodyne_msgs_s__rosidl_typesupport_c\n'}
+[1.140686] (-) TimerEvent: {}
+[1.242885] (-) TimerEvent: {}
+[1.285930] (debug_tools) StdoutLine: {'line': b'running egg_info\n'}
+[1.292523] (velodyne_laserscan) JobEnded: {'identifier': 'velodyne_laserscan', 'rc': 0}
+[1.300568] (velodyne_msgs) CommandEnded: {'returncode': 0}
+[1.303624] (debug_tools) StdoutLine: {'line': b'writing ../build/debug_tools/debug_tools.egg-info/PKG-INFO\n'}
+[1.308207] (debug_tools) StdoutLine: {'line': b'writing dependency_links to ../build/debug_tools/debug_tools.egg-info/dependency_links.txt\n'}
+[1.311254] (debug_tools) StdoutLine: {'line': b'writing entry points to ../build/debug_tools/debug_tools.egg-info/entry_points.txt\n'}
+[1.316142] (debug_tools) StdoutLine: {'line': b'writing requirements to ../build/debug_tools/debug_tools.egg-info/requires.txt\n'}
+[1.319798] (debug_tools) StdoutLine: {'line': b'writing top-level names to ../build/debug_tools/debug_tools.egg-info/top_level.txt\n'}
+[1.342839] (debug_tools) StdoutLine: {'line': b"reading manifest file '../build/debug_tools/debug_tools.egg-info/SOURCES.txt'\n"}
+[1.346342] (-) TimerEvent: {}
+[1.351940] (debug_tools) StdoutLine: {'line': b"writing manifest file '../build/debug_tools/debug_tools.egg-info/SOURCES.txt'\n"}
+[1.355603] (debug_tools) StdoutLine: {'line': b'running build\n'}
+[1.358494] (debug_tools) StdoutLine: {'line': b'running build_py\n'}
+[1.361493] (debug_tools) StdoutLine: {'line': b'running install\n'}
+[1.365225] (debug_tools) StdoutLine: {'line': b'running install_lib\n'}
+[1.374161] (debug_tools) StdoutLine: {'line': b'running install_data\n'}
+[1.377637] (debug_tools) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.383203] (debug_tools) StdoutLine: {'line': b"removing '/ros/install/debug_tools/lib/python3.12/site-packages/debug_tools-0.0.0-py3.12.egg-info' (and everything under it)\n"}
+[1.393854] (debug_tools) StdoutLine: {'line': b'Copying ../build/debug_tools/debug_tools.egg-info to /ros/install/debug_tools/lib/python3.12/site-packages/debug_tools-0.0.0-py3.12.egg-info\n'}
+[1.414930] (velodyne_msgs) JobProgress: {'identifier': 'velodyne_msgs', 'progress': 'install'}
+[1.416814] (velodyne_msgs) Command: {'cmd': ['/usr/bin/cmake', '--install', '/ros/build/velodyne_msgs'], 'cwd': '/ros/build/velodyne_msgs', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_msgs', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/rolling'}), 'shell': False}
+[1.431069] (velodyne_msgs) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[1.438180] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/rosidl_interfaces/velodyne_msgs\n'}
+[1.442552] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.json\n'}
+[1.447437] (-) TimerEvent: {}
+[1.448276] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.json\n'}
+[1.451751] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.456133] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.460473] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.471313] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__description.c\n'}
+[1.476175] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__functions.c\n'}
+[1.480765] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__functions.h\n'}
+[1.485342] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__struct.h\n'}
+[1.490134] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.c\n'}
+[1.494658] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.h\n'}
+[1.499147] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__description.c\n'}
+[1.503486] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__functions.c\n'}
+[1.507786] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__functions.h\n'}
+[1.511518] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__struct.h\n'}
+[1.517955] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.c\n'}
+[1.524125] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.h\n'}
+[1.528709] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_generator_c__visibility_control.h\n'}
+[1.537625] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_packet.h\n'}
+[1.540991] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_scan.h\n'}
+[1.546241] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/library_path.sh\n'}
+[1.550804] (-) TimerEvent: {}
+[1.551744] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/library_path.dsv\n'}
+[1.555738] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_generator_c.so\n'}
+[1.559900] (debug_tools) StdoutLine: {'line': b'running install_scripts\n'}
+[1.563428] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.567090] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.571768] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.577547] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_fastrtps_c.h\n'}
+[1.582496] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_fastrtps_c.h\n'}
+[1.589558] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h\n'}
+[1.593920] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_fastrtps_c.so\n'}
+[1.599061] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.602852] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.606951] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.613031] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__builder.hpp\n'}
+[1.616901] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__struct.hpp\n'}
+[1.621090] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__traits.hpp\n'}
+[1.626020] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.hpp\n'}
+[1.630682] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__builder.hpp\n'}
+[1.635761] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__struct.hpp\n'}
+[1.640969] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__traits.hpp\n'}
+[1.644474] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.hpp\n'}
+[1.650572] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_generator_cpp__visibility_control.hpp\n'}
+[1.656753] (-) TimerEvent: {}
+[1.658753] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_packet.hpp\n'}
+[1.665750] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_scan.hpp\n'}
+[1.670219] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.676026] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.681430] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.685028] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/dds_fastrtps\n'}
+[1.688215] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[1.694112] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[1.698596] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h\n'}
+[1.704069] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_fastrtps_cpp.so\n'}
+[1.707527] (debug_tools) StdoutLine: {'line': b'Installing bag_printer script to /ros/install/debug_tools/lib/debug_tools\n'}
+[1.711516] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.718056] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.723947] (debug_tools) StdoutLine: {'line': b"writing list of installed files to '/ros/build/debug_tools/install.log'\n"}
+[1.736243] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.739794] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_introspection_c.h\n'}
+[1.742778] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.c\n'}
+[1.747670] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_introspection_c.h\n'}
+[1.813991] (-) TimerEvent: {}
+[1.816241] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.c\n'}
+[1.834831] (debug_tools) CommandEnded: {'returncode': 0}
+[1.842378] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h\n'}
+[1.848099] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_introspection_c.so\n'}
+[1.852443] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_c.so\n'}
+[1.856839] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs\n'}
+[1.860913] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg\n'}
+[1.866573] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail\n'}
+[1.870780] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_introspection_cpp.hpp\n'}
+[1.877005] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.cpp\n'}
+[1.880148] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_introspection_cpp.hpp\n'}
+[1.885935] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.cpp\n'}
+[1.890331] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_introspection_cpp.so\n'}
+[1.894319] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_cpp.so\n'}
+[1.899335] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/pythonpath.sh\n'}
+[1.904022] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/pythonpath.dsv\n'}
+[1.907739] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info\n'}
+[1.912742] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/PKG-INFO\n'}
+[1.916088] (-) TimerEvent: {}
+[1.917009] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/SOURCES.txt\n'}
+[1.921140] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/dependency_links.txt\n'}
+[1.926003] (debug_tools) JobEnded: {'identifier': 'debug_tools', 'rc': 0}
+[1.932665] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/top_level.txt\n'}
+[1.936227] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs\n'}
+[1.940408] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/__init__.py\n'}
+[1.945593] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_c.c\n'}
+[1.949623] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_fastrtps_c.c\n'}
+[1.955046] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_introspection_c.c\n'}
+[1.959302] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg\n'}
+[1.964205] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/__init__.py\n'}
+[1.968607] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_packet.py\n'}
+[1.972517] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_packet_s.c\n'}
+[1.979642] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_scan.py\n'}
+[1.983887] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_scan_s.c\n'}
+[1.988779] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_c.so\n'}
+[1.994858] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_fastrtps_c.so\n'}
+[1.998631] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_introspection_c.so\n'}
+[2.002554] (velodyne_msgs) StdoutLine: {'line': b"Listing '/ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs'...\n"}
+[2.008759] (velodyne_msgs) StdoutLine: {'line': b"Listing '/ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg'...\n"}
+[2.012074] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_fastrtps_c.so\n'}
+[2.015644] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_introspection_c.so\n'}
+[2.020276] (-) TimerEvent: {}
+[2.021515] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_c.so\n'}
+[2.025330] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_generator_py.so\n'}
+[2.029695] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.idl\n'}
+[2.033463] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.idl\n'}
+[2.039452] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.msg\n'}
+[2.044798] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.msg\n'}
+[2.049230] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/package_run_dependencies/velodyne_msgs\n'}
+[2.053326] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/parent_prefix_path/velodyne_msgs\n'}
+[2.058190] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/ament_prefix_path.sh\n'}
+[2.061774] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/ament_prefix_path.dsv\n'}
+[2.065613] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/path.sh\n'}
+[2.071863] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/path.dsv\n'}
+[2.075775] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.bash\n'}
+[2.079783] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.sh\n'}
+[2.084125] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.zsh\n'}
+[2.088209] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.dsv\n'}
+[2.092270] (velodyne_msgs) StdoutLine: {'line': b'-- Installing: /ros/install/velodyne_msgs/share/velodyne_msgs/package.dsv\n'}
+[2.096972] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/packages/velodyne_msgs\n'}
+[2.100776] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cExport.cmake\n'}
+[2.104511] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cExport-noconfig.cmake\n'}
+[2.110181] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cExport.cmake\n'}
+[2.114377] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake\n'}
+[2.119554] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cppExport.cmake\n'}
+[2.123825] (-) TimerEvent: {}
+[2.125484] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cppExport.cmake\n'}
+[2.129868] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake\n'}
+[2.133809] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cExport.cmake\n'}
+[2.137191] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake\n'}
+[2.142760] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cExport.cmake\n'}
+[2.146000] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cExport-noconfig.cmake\n'}
+[2.148909] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cppExport.cmake\n'}
+[2.170817] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake\n'}
+[2.173702] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cppExport.cmake\n'}
+[2.179714] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cppExport-noconfig.cmake\n'}
+[2.197142] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_pyExport.cmake\n'}
+[2.201852] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_pyExport-noconfig.cmake\n'}
+[2.213258] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake-extras.cmake\n'}
+[2.218421] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[2.229816] (-) TimerEvent: {}
+[2.230721] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[2.237144] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[2.240306] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[2.247164] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake\n'}
+[2.252998] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake\n'}
+[2.257630] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgsConfig.cmake\n'}
+[2.266278] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgsConfig-version.cmake\n'}
+[2.270482] (velodyne_msgs) StdoutLine: {'line': b'-- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/package.xml\n'}
+[2.273643] (velodyne_msgs) CommandEnded: {'returncode': 0}
+[2.330066] (-) TimerEvent: {}
+[2.431181] (-) TimerEvent: {}
+[2.532897] (-) TimerEvent: {}
+[2.579247] (velodyne_msgs) JobEnded: {'identifier': 'velodyne_msgs', 'rc': 0}
+[2.587183] (velodyne_driver) JobStarted: {'identifier': 'velodyne_driver'}
+[2.594592] (velodyne_pointcloud) JobStarted: {'identifier': 'velodyne_pointcloud'}
+[2.630116] (velodyne_driver) JobProgress: {'identifier': 'velodyne_driver', 'progress': 'cmake'}
+[2.633080] (-) TimerEvent: {}
+[2.640248] (velodyne_driver) Command: {'cmd': ['/usr/bin/cmake', '/ros/velodyne/velodyne_driver', '-DCMAKE_INSTALL_PREFIX=/ros/install/velodyne_driver'], 'cwd': '/ros/build/velodyne_driver', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/ros/install/velodyne_msgs/lib:/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/ros/install/velodyne_msgs:/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_driver', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/ros/install/velodyne_msgs/lib/python3.12/site-packages:/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/ros/install/velodyne_msgs:/opt/ros/rolling'}), 'shell': False}
+[2.667799] (velodyne_pointcloud) JobProgress: {'identifier': 'velodyne_pointcloud', 'progress': 'cmake'}
+[2.668679] (velodyne_pointcloud) Command: {'cmd': ['/usr/bin/cmake', '/ros/velodyne/velodyne_pointcloud', '-DCMAKE_INSTALL_PREFIX=/ros/install/velodyne_pointcloud'], 'cwd': '/ros/build/velodyne_pointcloud', 'env': OrderedDict({'HOSTNAME': '9ca5e04dd2e1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/ros/install/velodyne_msgs/lib:/opt/ros/rolling/lib/aarch64-linux-gnu:/opt/ros/rolling/lib', 'HOME': '/root', 'OLDPWD': '/', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'rolling', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/rolling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.local/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/ros/install/velodyne_msgs:/opt/ros/rolling', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/ros/build/velodyne_pointcloud', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/ros/install/velodyne_msgs/lib/python3.12/site-packages:/opt/ros/rolling/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/ros/install/velodyne_msgs:/opt/ros/rolling'}), 'shell': False}
+[2.733596] (-) TimerEvent: {}
+[2.763187] (velodyne_driver) StdoutLine: {'line': b'-- Found ament_cmake_ros: 0.13.0 (/opt/ros/rolling/share/ament_cmake_ros/cmake)\n'}
+[2.770154] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found ament_cmake: 2.7.0 (/opt/ros/rolling/share/ament_cmake/cmake)\n'}
+[2.833733] (-) TimerEvent: {}
+[2.935516] (-) TimerEvent: {}
+[3.037792] (-) TimerEvent: {}
+[3.087548] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found angles: 1.16.0 (/opt/ros/rolling/share/angles/cmake)\n'}
+[3.121662] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found diagnostic_updater: 4.3.1 (/opt/ros/rolling/share/diagnostic_updater/cmake)\n'}
+[3.133130] (velodyne_driver) StdoutLine: {'line': b'-- Found diagnostic_updater: 4.3.1 (/opt/ros/rolling/share/diagnostic_updater/cmake)\n'}
+[3.140190] (-) TimerEvent: {}
+[3.241476] (-) TimerEvent: {}
+[3.342919] (-) TimerEvent: {}
+[3.444812] (-) TimerEvent: {}
+[3.449221] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found rosidl_generator_c: 4.8.1 (/opt/ros/rolling/share/rosidl_generator_c/cmake)\n'}
+[3.474759] (velodyne_driver) StdoutLine: {'line': b'-- Found rosidl_generator_c: 4.8.1 (/opt/ros/rolling/share/rosidl_generator_c/cmake)\n'}
+[3.545054] (-) TimerEvent: {}
+[3.551316] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 4.8.1 (/opt/ros/rolling/share/rosidl_generator_cpp/cmake)\n'}
+[3.572498] (velodyne_driver) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 4.8.1 (/opt/ros/rolling/share/rosidl_generator_cpp/cmake)\n'}
+[3.645204] (-) TimerEvent: {}
+[3.662446] (velodyne_pointcloud) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[3.673338] (velodyne_driver) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[3.745520] (-) TimerEvent: {}
+[3.781791] (velodyne_pointcloud) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[3.786764] (velodyne_driver) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[3.845685] (-) TimerEvent: {}
+[3.948091] (-) TimerEvent: {}
+[4.049649] (-) TimerEvent: {}
+[4.150944] (-) TimerEvent: {}
+[4.236077] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 7.4.3 (/opt/ros/rolling/share/rmw_implementation_cmake/cmake)\n'}
+[4.248533] (velodyne_driver) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 7.4.3 (/opt/ros/rolling/share/rmw_implementation_cmake/cmake)\n'}
+[4.252575] (-) TimerEvent: {}
+[4.268678] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 9.0.1 (/opt/ros/rolling/share/rmw_fastrtps_cpp/cmake)\n'}
+[4.278973] (velodyne_driver) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 9.0.1 (/opt/ros/rolling/share/rmw_fastrtps_cpp/cmake)\n'}
+[4.352766] (-) TimerEvent: {}
+[4.454055] (-) TimerEvent: {}
+[4.556475] (-) TimerEvent: {}
+[4.610667] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "3.0.13")  \n'}
+[4.619567] (velodyne_driver) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "3.0.13")  \n'}
+[4.656625] (-) TimerEvent: {}
+[4.663786] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/rolling/include (Required is at least version "2.13") \n'}
+[4.674542] (velodyne_driver) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/rolling/include (Required is at least version "2.13") \n'}
+[4.737410] (velodyne_pointcloud) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[4.740696] (velodyne_driver) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[4.756733] (-) TimerEvent: {}
+[4.859486] (-) TimerEvent: {}
+[4.960724] (-) TimerEvent: {}
+[4.990567] (velodyne_driver) StdoutLine: {'line': b'-- Found rclcpp_components: 28.3.3 (/opt/ros/rolling/share/rclcpp_components/cmake)\n'}
+[5.010958] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found geometry_msgs: 5.4.1 (/opt/ros/rolling/share/geometry_msgs/cmake)\n'}
+[5.059331] (velodyne_pointcloud) StdoutLine: {'line': b'-- Found message_filters: 6.0.4 (/opt/ros/rolling/share/message_filters/cmake)\n'}
+[5.063308] (-) TimerEvent: {}
+[5.101981] (velodyne_pointcloud) StderrLine: {'line': b'\x1b[31mCMake Error at CMakeLists.txt:19 (find_package):\n'}
+[5.106497] (velodyne_pointcloud) StderrLine: {'line': b'  By not providing "FindPCL.cmake" in CMAKE_MODULE_PATH this project has\n'}
+[5.113378] (velodyne_pointcloud) StderrLine: {'line': b'  asked CMake to find a package configuration file provided by "PCL", but\n'}
+[5.117551] (velodyne_pointcloud) StderrLine: {'line': b'  CMake did not find one.\n'}
+[5.122763] (velodyne_pointcloud) StderrLine: {'line': b'\n'}
+[5.126227] (velodyne_pointcloud) StderrLine: {'line': b'  Could not find a package configuration file provided by "PCL" with any of\n'}
+[5.130683] (velodyne_pointcloud) StderrLine: {'line': b'  the following names:\n'}
+[5.134055] (velodyne_pointcloud) StderrLine: {'line': b'\n'}
+[5.138451] (velodyne_pointcloud) StderrLine: {'line': b'    PCLConfig.cmake\n'}
+[5.143455] (velodyne_pointcloud) StderrLine: {'line': b'    pcl-config.cmake\n'}
+[5.147675] (velodyne_pointcloud) StderrLine: {'line': b'\n'}
+[5.150763] (velodyne_pointcloud) StderrLine: {'line': b'  Add the installation prefix of "PCL" to CMAKE_PREFIX_PATH or set "PCL_DIR"\n'}
+[5.155184] (velodyne_pointcloud) StderrLine: {'line': b'  to a directory containing one of the above files.  If "PCL" provides a\n'}
+[5.158607] (velodyne_pointcloud) StderrLine: {'line': b'  separate development package or SDK, be sure it has been installed.\n'}
+[5.163280] (velodyne_pointcloud) StderrLine: {'line': b'\n'}
+[5.168446] (-) TimerEvent: {}
+[5.169233] (velodyne_pointcloud) StderrLine: {'line': b'\x1b[0m\n'}
+[5.172441] (velodyne_pointcloud) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[5.177699] (velodyne_pointcloud) CommandEnded: {'returncode': 1}
+[5.180798] (velodyne_driver) StdoutLine: {'line': b'-- Found tf2_ros: 0.38.2 (/opt/ros/rolling/share/tf2_ros/cmake)\n'}
+[5.259217] (velodyne_pointcloud) JobEnded: {'identifier': 'velodyne_pointcloud', 'rc': 1}
+[5.268608] (-) TimerEvent: {}
+[5.369789] (-) TimerEvent: {}
+[5.471072] (-) TimerEvent: {}
+[5.495171] (velodyne_driver) StdoutLine: {'line': b'-- Found velodyne_msgs: 2.5.1 (/ros/install/velodyne_msgs/share/velodyne_msgs/cmake)\n'}
+[5.571200] (-) TimerEvent: {}
+[5.588438] (velodyne_driver) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.18.1 (/opt/ros/rolling/share/ament_lint_auto/cmake)\n'}
+[5.673499] (-) TimerEvent: {}
+[5.775092] (-) TimerEvent: {}
+[5.877189] (-) TimerEvent: {}
+[5.937281] (velodyne_driver) StdoutLine: {'line': b"-- Found gtest sources under '/opt/ros/rolling/src/gtest_vendor': C++ tests using 'Google Test' will be built\n"}
+[5.956504] (velodyne_driver) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[5.977277] (-) TimerEvent: {}
+[6.078380] (-) TimerEvent: {}
+[6.179935] (-) TimerEvent: {}
+[6.281011] (-) TimerEvent: {}
+[6.382118] (-) TimerEvent: {}
+[6.483409] (-) TimerEvent: {}
+[6.584689] (-) TimerEvent: {}
+[6.686340] (-) TimerEvent: {}
+[6.787822] (-) TimerEvent: {}
+[6.804308] (velodyne_driver) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[6.808660] (velodyne_driver) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[6.888008] (-) TimerEvent: {}
+[6.942011] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'copyright' to check source files copyright and LICENSE\n"}
+[6.983449] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[6.988726] (-) TimerEvent: {}
+[6.989642] (velodyne_driver) StdoutLine: {'line': b'-- Configured cppcheck include dirs: $<BUILD_INTERFACE:/ros/velodyne/velodyne_driver/include>\n'}
+[6.994112] (velodyne_driver) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[7.008470] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'cpplint' to check C / C++ code against the Google style\n"}
+[7.011998] (velodyne_driver) StdoutLine: {'line': b'-- Configured cpplint exclude dirs and/or files: \n'}
+[7.023507] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'flake8' to check Python code syntax and style conventions\n"}
+[7.026622] (velodyne_driver) StdoutLine: {'line': b"-- Configured 'flake8' exclude dirs and/or files: \n"}
+[7.040027] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[7.055183] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257\n"}
+[7.077660] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[7.081444] (velodyne_driver) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[7.088840] (-) TimerEvent: {}
+[7.094626] (velodyne_driver) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[7.188993] (-) TimerEvent: {}
+[7.290130] (-) TimerEvent: {}
+[7.343060] (velodyne_driver) StdoutLine: {'line': b'-- Configuring done (4.6s)\n'}
+[7.390454] (-) TimerEvent: {}
+[7.491281] (-) TimerEvent: {}
+[7.592439] (-) TimerEvent: {}
+[7.693582] (-) TimerEvent: {}
+[7.794502] (-) TimerEvent: {}
+[7.895841] (-) TimerEvent: {}
+[7.997228] (-) TimerEvent: {}
+[8.098323] (-) TimerEvent: {}
+[8.200443] (-) TimerEvent: {}
+[8.302858] (-) TimerEvent: {}
+[8.403987] (-) TimerEvent: {}
+[8.504923] (-) TimerEvent: {}
+[8.605882] (-) TimerEvent: {}
+[8.707336] (-) TimerEvent: {}
+[8.808411] (-) TimerEvent: {}
+[8.909563] (-) TimerEvent: {}
+[8.938619] (velodyne_driver) StdoutLine: {'line': b'-- Generating done (1.6s)\n'}
+[9.009759] (-) TimerEvent: {}
+[9.087219] (velodyne_driver) StdoutLine: {'line': b'-- Build files have been written to: /ros/build/velodyne_driver\n'}
+[9.095079] (velodyne_driver) JobEnded: {'identifier': 'velodyne_driver', 'rc': 'SIGINT'}
+[9.107709] (velodyne) JobSkipped: {'identifier': 'velodyne'}
+[9.108502] (-) EventReactorShutdown: {}

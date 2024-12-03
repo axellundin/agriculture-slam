@@ -1,0 +1,9 @@
+/ros/build/velodyne/CMakeFiles/uninstall.dir
+/ros/build/velodyne/CMakeFiles/velodyne_uninstall.dir
+/ros/build/velodyne/CMakeFiles/test.dir
+/ros/build/velodyne/CMakeFiles/edit_cache.dir
+/ros/build/velodyne/CMakeFiles/rebuild_cache.dir
+/ros/build/velodyne/CMakeFiles/list_install_components.dir
+/ros/build/velodyne/CMakeFiles/install.dir
+/ros/build/velodyne/CMakeFiles/install/local.dir
+/ros/build/velodyne/CMakeFiles/install/strip.dir

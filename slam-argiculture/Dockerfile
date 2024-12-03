@@ -1,6 +1,16 @@
 FROM ros:rolling-ros-base
 
-RUN apt-get update && apt-get install -y curl python3-colcon-common-extensions
+RUN apt-get update && apt-get install -y \
+    curl \ 
+    python3-colcon-common-extensions \
+    pipx \ 
+    ros-rolling-angles \
+    ros-rolling-diagnostic-updater \
+    libpcl-dev \ 
+    libpcap-dev 
+    
+RUN pipx install rosbags
+RUN pipx ensurepath
 
 RUN echo "source /opt/ros/rolling/setup.bash" >> ~/.bashrc
 

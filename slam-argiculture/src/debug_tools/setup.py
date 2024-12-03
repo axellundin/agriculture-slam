@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'bag_printer = debug_tools.bag_printer:main',
         ],
     },
 )

@@ -1,0 +1,102 @@
+[0.123s] Invoking command in '/ros/build/velodyne_pointcloud': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /ros/build/velodyne_pointcloud -- -j4 -l4
+[0.664s] [  5%] [32mBuilding CXX object CMakeFiles/velodyne_rawdata.dir/src/lib/rawdata.cpp.o[0m
+[0.688s] [ 22%] [32mBuilding CXX object gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o[0m
+[0.699s] [ 22%] [32mBuilding CXX object gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o[0m
+[0.710s] [ 22%] [32mBuilding CXX object CMakeFiles/velodyne_cloud_types.dir/src/lib/pointcloudXYZIRT.cpp.o[0m
+[1.688s] [ 27%] [32m[1mLinking CXX static library libgtest_main.a[0m
+[2.102s] [ 27%] Built target gtest_main
+[2.231s] [ 33%] [32mBuilding CXX object CMakeFiles/velodyne_cloud_types.dir/src/lib/organized_cloudXYZIRT.cpp.o[0m
+[5.669s] [ 38%] [32m[1mLinking CXX static library libgtest.a[0m
+[9.185s] [ 38%] Built target gtest
+[9.483s] [ 44%] [32mBuilding CXX object tests/CMakeFiles/test_row_step.dir/test_row_step.cpp.o[0m
+[14.717s] [ 50%] [32mBuilding CXX object CMakeFiles/velodyne_rawdata.dir/src/lib/calibration.cpp.o[0m
+[16.827s] [ 55%] [32m[1mLinking CXX shared library libvelodyne_cloud_types.so[0m
+[19.597s] [ 55%] Built target velodyne_cloud_types
+[21.634s] [ 61%] [32m[1mLinking CXX shared library libvelodyne_rawdata.so[0m
+[22.704s] [ 61%] Built target velodyne_rawdata
+[22.943s] [ 66%] [32mBuilding CXX object tests/CMakeFiles/test_calibration.dir/test_calibration.cpp.o[0m
+[22.959s] [ 72%] [32mBuilding CXX object CMakeFiles/transform.dir/src/conversions/transform.cpp.o[0m
+[23.020s] In file included from [01m[K/ros/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/transform.hpp:36[m[K,
+[23.026s]                  from [01m[K/ros/velodyne/velodyne_pointcloud/src/conversions/transform.cpp:33[m[K:
+[23.031s] [01m[K/opt/ros/rolling/include/message_filters/message_filters/subscriber.h:18:2:[m[K [01;35m[Kwarning: [m[K#warning This header is obsolete, please include message_filters/subscriber.hpp instead [[01;35m[K-Wcpp[m[K]
+[23.037s]    18 | #[01;35m[Kwarning[m[K This header is obsolete, please include message_filters/subscriber.hpp instead
+[23.043s]       |  [01;35m[K^~~~~~~[m[K
+[23.185s] [ 77%] [32m[1mLinking CXX executable test_row_step[0m
+[26.567s] [ 83%] [32m[1mLinking CXX executable test_calibration[0m
+[26.995s] [ 83%] Built target test_row_step
+[29.476s] [ 83%] Built target test_calibration
+[42.044s] [ 88%] [32m[1mLinking CXX shared library libtransform.so[0m
+[47.958s] [ 88%] Built target transform
+[48.119s] [ 94%] [32mBuilding CXX object CMakeFiles/velodyne_transform_node.dir/src/conversions/transform_node.cpp.o[0m
+[49.789s] In file included from [01m[K/ros/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/transform.hpp:36[m[K,
+[49.794s]                  from [01m[K/ros/velodyne/velodyne_pointcloud/src/conversions/transform_node.cpp:37[m[K:
+[49.798s] [01m[K/opt/ros/rolling/include/message_filters/message_filters/subscriber.h:18:2:[m[K [01;35m[Kwarning: [m[K#warning This header is obsolete, please include message_filters/subscriber.hpp instead [[01;35m[K-Wcpp[m[K]
+[49.802s]    18 | #[01;35m[Kwarning[m[K This header is obsolete, please include message_filters/subscriber.hpp instead
+[49.807s]       |  [01;35m[K^~~~~~~[m[K
+[54.330s] [100%] [32m[1mLinking CXX executable velodyne_transform_node[0m
+[55.281s] [100%] Built target velodyne_transform_node
+[55.375s] Invoked command in '/ros/build/velodyne_pointcloud' returned '0': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /ros/build/velodyne_pointcloud -- -j4 -l4
+[55.426s] Invoking command in '/ros/build/velodyne_pointcloud': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /ros/build/velodyne_pointcloud
+[55.483s] -- Install configuration: ""
+[55.495s] -- Installing: /ros/install/velodyne_pointcloud/lib/libvelodyne_cloud_types.so
+[55.702s] -- Set non-toolchain portion of runtime path of "/ros/install/velodyne_pointcloud/lib/libvelodyne_cloud_types.so" to ""
+[55.708s] -- Installing: /ros/install/velodyne_pointcloud/lib/libvelodyne_rawdata.so
+[55.805s] -- Set non-toolchain portion of runtime path of "/ros/install/velodyne_pointcloud/lib/libvelodyne_rawdata.so" to ""
+[55.813s] -- Installing: /ros/install/velodyne_pointcloud/lib/libtransform.so
+[56.915s] -- Set non-toolchain portion of runtime path of "/ros/install/velodyne_pointcloud/lib/libtransform.so" to ""
+[56.928s] -- Installing: /ros/install/velodyne_pointcloud/lib/velodyne_pointcloud/velodyne_transform_node
+[56.999s] -- Set non-toolchain portion of runtime path of "/ros/install/velodyne_pointcloud/lib/velodyne_pointcloud/velodyne_transform_node" to ""
+[57.004s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud
+[57.018s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/calibration.hpp
+[57.039s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/datacontainerbase.hpp
+[57.062s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/organized_cloudXYZIRT.hpp
+[57.082s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/pointcloudXYZIRT.hpp
+[57.101s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/rawdata.hpp
+[57.122s] -- Installing: /ros/install/velodyne_pointcloud/include/velodyne_pointcloud/transform.hpp
+[57.142s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/config
+[57.156s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/config/VLP16-velodyne_transform_node-params.yaml
+[57.176s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/config/VLP32C-velodyne_transform_node-params.yaml
+[57.198s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/config/VLS128-velodyne_transform_node-params.yaml
+[57.223s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch
+[57.236s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP16-composed-launch.py
+[57.257s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP16-launch.py
+[57.283s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-composed-launch.py
+[57.305s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-launch.py
+[57.327s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLS128-composed-launch.py
+[57.350s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/launch/velodyne_transform_node-VLS128-launch.py
+[57.373s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params
+[57.386s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/32db.yaml
+[57.407s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/64e_s2.1-sztaki.yaml
+[57.438s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/64e_s3-xiesc.yaml
+[57.470s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/64e_utexas.yaml
+[57.497s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/VLP16_hires_db.yaml
+[57.519s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/VLP16db.yaml
+[57.545s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/VLS128.yaml
+[57.578s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/VeloView-VLP-32C.yaml
+[57.606s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/issue_84_float_intensities.yaml
+[57.640s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/params/rviz_points.vcg
+[57.688s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/library_path.sh
+[57.715s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/library_path.dsv
+[57.772s] -- Installing: /ros/install/velodyne_pointcloud/share/ament_index/resource_index/package_run_dependencies/velodyne_pointcloud
+[57.835s] -- Installing: /ros/install/velodyne_pointcloud/share/ament_index/resource_index/parent_prefix_path/velodyne_pointcloud
+[57.894s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/ament_prefix_path.sh
+[57.954s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/ament_prefix_path.dsv
+[58.020s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/path.sh
+[58.046s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/environment/path.dsv
+[58.071s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/local_setup.bash
+[58.095s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/local_setup.sh
+[58.117s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/local_setup.zsh
+[58.142s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/local_setup.dsv
+[58.162s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/package.dsv
+[58.192s] -- Installing: /ros/install/velodyne_pointcloud/share/ament_index/resource_index/packages/velodyne_pointcloud
+[58.222s] -- Installing: /ros/install/velodyne_pointcloud/share/ament_index/resource_index/rclcpp_components/velodyne_pointcloud
+[58.252s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/velodyne_pointcloudExport.cmake
+[58.280s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/velodyne_pointcloudExport-noconfig.cmake
+[58.303s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/ament_cmake_export_include_directories-extras.cmake
+[58.323s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/ament_cmake_export_dependencies-extras.cmake
+[58.345s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/ament_cmake_export_libraries-extras.cmake
+[58.364s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/ament_cmake_export_targets-extras.cmake
+[58.383s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/velodyne_pointcloudConfig.cmake
+[58.410s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/cmake/velodyne_pointcloudConfig-version.cmake
+[58.434s] -- Installing: /ros/install/velodyne_pointcloud/share/velodyne_pointcloud/package.xml
+[58.463s] Invoked command in '/ros/build/velodyne_pointcloud' returned '0': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /ros/build/velodyne_pointcloud

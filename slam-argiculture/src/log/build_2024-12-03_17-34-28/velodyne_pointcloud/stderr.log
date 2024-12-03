@@ -1,0 +1,10 @@
+In file included from [01m[K/ros/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/transform.hpp:36[m[K,
+                 from [01m[K/ros/velodyne/velodyne_pointcloud/src/conversions/transform.cpp:33[m[K:
+[01m[K/opt/ros/rolling/include/message_filters/message_filters/subscriber.h:18:2:[m[K [01;35m[Kwarning: [m[K#warning This header is obsolete, please include message_filters/subscriber.hpp instead [[01;35m[K-Wcpp[m[K]
+   18 | #[01;35m[Kwarning[m[K This header is obsolete, please include message_filters/subscriber.hpp instead
+      |  [01;35m[K^~~~~~~[m[K
+In file included from [01m[K/ros/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/transform.hpp:36[m[K,
+                 from [01m[K/ros/velodyne/velodyne_pointcloud/src/conversions/transform_node.cpp:37[m[K:
+[01m[K/opt/ros/rolling/include/message_filters/message_filters/subscriber.h:18:2:[m[K [01;35m[Kwarning: [m[K#warning This header is obsolete, please include message_filters/subscriber.hpp instead [[01;35m[K-Wcpp[m[K]
+   18 | #[01;35m[Kwarning[m[K This header is obsolete, please include message_filters/subscriber.hpp instead
+      |  [01;35m[K^~~~~~~[m[K

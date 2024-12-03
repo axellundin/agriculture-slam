@@ -1,0 +1,170 @@
+[0.118s] Invoking command in '/ros/build/velodyne_msgs': CMAKE_PREFIX_PATH=/opt/ros/rolling /usr/bin/cmake --build /ros/build/velodyne_msgs -- -j4 -l4
+[0.267s] [  2%] Built target velodyne_msgs__rosidl_generator_type_description
+[0.351s] [  4%] Built target velodyne_msgs__cpp
+[0.403s] [ 22%] Built target velodyne_msgs__rosidl_generator_c
+[0.513s] [ 38%] Built target velodyne_msgs__rosidl_typesupport_fastrtps_cpp
+[0.532s] [ 45%] Built target velodyne_msgs__rosidl_typesupport_fastrtps_c
+[0.552s] [ 50%] Built target velodyne_msgs__rosidl_typesupport_cpp
+[0.659s] [ 68%] Built target velodyne_msgs__rosidl_typesupport_introspection_c
+[0.683s] [ 68%] Built target ament_cmake_python_copy_velodyne_msgs
+[0.689s] [ 75%] Built target velodyne_msgs__rosidl_typesupport_c
+[0.703s] [ 77%] Built target velodyne_msgs__rosidl_typesupport_introspection_cpp
+[0.836s] [ 77%] Built target velodyne_msgs
+[0.908s] [ 79%] Built target velodyne_msgs__py
+[0.926s] running egg_info
+[0.939s] [ 86%] Built target velodyne_msgs__rosidl_generator_py
+[0.960s] writing velodyne_msgs.egg-info/PKG-INFO
+[0.973s] writing dependency_links to velodyne_msgs.egg-info/dependency_links.txt
+[0.989s] writing top-level names to velodyne_msgs.egg-info/top_level.txt
+[1.085s] reading manifest file 'velodyne_msgs.egg-info/SOURCES.txt'
+[1.091s] [ 97%] Built target velodyne_msgs_s__rosidl_typesupport_fastrtps_c
+[1.096s] [ 97%] Built target velodyne_msgs_s__rosidl_typesupport_introspection_c
+[1.100s] writing manifest file 'velodyne_msgs.egg-info/SOURCES.txt'
+[1.107s] [100%] Built target velodyne_msgs_s__rosidl_typesupport_c
+[1.112s] [100%] Built target ament_cmake_python_build_velodyne_msgs_egg
+[1.263s] Invoked command in '/ros/build/velodyne_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/rolling /usr/bin/cmake --build /ros/build/velodyne_msgs -- -j4 -l4
+[1.409s] Invoking command in '/ros/build/velodyne_msgs': CMAKE_PREFIX_PATH=/opt/ros/rolling /usr/bin/cmake --install /ros/build/velodyne_msgs
+[1.426s] -- Install configuration: ""
+[1.433s] -- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/rosidl_interfaces/velodyne_msgs
+[1.442s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.json
+[1.451s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.json
+[1.462s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.470s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.481s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.485s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__description.c
+[1.491s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__functions.c
+[1.499s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__functions.h
+[1.505s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__struct.h
+[1.514s] -- Installing: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.c
+[1.520s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.h
+[1.526s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__description.c
+[1.530s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__functions.c
+[1.533s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__functions.h
+[1.537s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__struct.h
+[1.543s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.c
+[1.547s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.h
+[1.554s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_generator_c__visibility_control.h
+[1.558s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_packet.h
+[1.561s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_scan.h
+[1.565s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/library_path.sh
+[1.569s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/library_path.dsv
+[1.573s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_generator_c.so
+[1.578s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.582s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.587s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.592s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_fastrtps_c.h
+[1.596s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_fastrtps_c.h
+[1.599s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[1.603s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_fastrtps_c.so
+[1.608s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.611s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.615s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.623s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__builder.hpp
+[1.629s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__struct.hpp
+[1.632s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__traits.hpp
+[1.638s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.hpp
+[1.650s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__builder.hpp
+[1.654s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__struct.hpp
+[1.659s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__traits.hpp
+[1.663s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.hpp
+[1.669s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[1.674s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_packet.hpp
+[1.678s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/velodyne_scan.hpp
+[1.684s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.690s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.699s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.704s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/dds_fastrtps
+[1.708s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_fastrtps_cpp.hpp
+[1.711s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_fastrtps_cpp.hpp
+[1.716s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[1.722s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_fastrtps_cpp.so
+[1.728s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.732s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.738s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.743s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_introspection_c.h
+[1.747s] -- Installing: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.c
+[1.754s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_introspection_c.h
+[1.758s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.c
+[1.769s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[1.775s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_introspection_c.so
+[1.780s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_c.so
+[1.792s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs
+[1.799s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg
+[1.805s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail
+[1.810s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__rosidl_typesupport_introspection_cpp.hpp
+[1.821s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_packet__type_support.cpp
+[1.825s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__rosidl_typesupport_introspection_cpp.hpp
+[1.829s] -- Up-to-date: /ros/install/velodyne_msgs/include/velodyne_msgs/velodyne_msgs/msg/detail/velodyne_scan__type_support.cpp
+[1.834s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_introspection_cpp.so
+[1.841s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_typesupport_cpp.so
+[1.855s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/pythonpath.sh
+[1.859s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/pythonpath.dsv
+[1.864s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info
+[1.868s] -- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/PKG-INFO
+[1.872s] -- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/SOURCES.txt
+[1.875s] -- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/dependency_links.txt
+[1.880s] -- Installing: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs-2.5.1-py3.12.egg-info/top_level.txt
+[1.884s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs
+[1.897s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/__init__.py
+[1.902s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_c.c
+[1.906s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+[1.909s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/_velodyne_msgs_s.ep.rosidl_typesupport_introspection_c.c
+[1.912s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg
+[1.919s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/__init__.py
+[1.924s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_packet.py
+[1.928s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_packet_s.c
+[1.934s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_scan.py
+[1.939s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg/_velodyne_scan_s.c
+[1.944s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_c.so
+[1.948s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_fastrtps_c.so
+[1.953s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_introspection_c.so
+[1.958s] Listing '/ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs'...
+[1.961s] Listing '/ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/msg'...
+[1.965s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_fastrtps_c.so
+[1.969s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_introspection_c.so
+[1.973s] -- Up-to-date: /ros/install/velodyne_msgs/lib/python3.12/site-packages/velodyne_msgs/velodyne_msgs_s__rosidl_typesupport_c.so
+[1.976s] -- Up-to-date: /ros/install/velodyne_msgs/lib/libvelodyne_msgs__rosidl_generator_py.so
+[1.980s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.idl
+[1.986s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.idl
+[1.991s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodynePacket.msg
+[1.995s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/msg/VelodyneScan.msg
+[2.000s] -- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/package_run_dependencies/velodyne_msgs
+[2.005s] -- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/parent_prefix_path/velodyne_msgs
+[2.010s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/ament_prefix_path.sh
+[2.014s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/ament_prefix_path.dsv
+[2.019s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/path.sh
+[2.024s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/environment/path.dsv
+[2.029s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.bash
+[2.033s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.sh
+[2.039s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.zsh
+[2.043s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/local_setup.dsv
+[2.047s] -- Installing: /ros/install/velodyne_msgs/share/velodyne_msgs/package.dsv
+[2.054s] -- Up-to-date: /ros/install/velodyne_msgs/share/ament_index/resource_index/packages/velodyne_msgs
+[2.059s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cExport.cmake
+[2.063s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cExport-noconfig.cmake
+[2.069s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+[2.072s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[2.076s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_cppExport.cmake
+[2.080s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+[2.084s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[2.088s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cExport.cmake
+[2.093s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[2.100s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cExport.cmake
+[2.105s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[2.108s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[2.111s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[2.117s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cppExport.cmake
+[2.120s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[2.123s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_pyExport.cmake
+[2.129s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/export_velodyne_msgs__rosidl_generator_pyExport-noconfig.cmake
+[2.133s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake-extras.cmake
+[2.138s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[2.142s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[2.148s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[2.152s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[2.157s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[2.163s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[2.168s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgsConfig.cmake
+[2.172s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/cmake/velodyne_msgsConfig-version.cmake
+[2.176s] -- Up-to-date: /ros/install/velodyne_msgs/share/velodyne_msgs/package.xml
+[2.180s] Invoked command in '/ros/build/velodyne_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/rolling /usr/bin/cmake --install /ros/build/velodyne_msgs

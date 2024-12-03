@@ -1,0 +1,24 @@
+[1.014s] Invoking command in '/ros/debug_tools': PYTHONPATH=/ros/build/debug_tools/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/ros/install/debug_tools/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/debug_tools build --build-base /ros/build/debug_tools/build install --record /ros/build/debug_tools/install.log --single-version-externally-managed install_data
+[1.175s] running egg_info
+[1.185s] writing ../build/debug_tools/debug_tools.egg-info/PKG-INFO
+[1.193s] writing dependency_links to ../build/debug_tools/debug_tools.egg-info/dependency_links.txt
+[1.200s] writing entry points to ../build/debug_tools/debug_tools.egg-info/entry_points.txt
+[1.209s] writing requirements to ../build/debug_tools/debug_tools.egg-info/requires.txt
+[1.214s] writing top-level names to ../build/debug_tools/debug_tools.egg-info/top_level.txt
+[1.269s] reading manifest file '../build/debug_tools/debug_tools.egg-info/SOURCES.txt'
+[1.282s] writing manifest file '../build/debug_tools/debug_tools.egg-info/SOURCES.txt'
+[1.287s] running build
+[1.292s] running build_py
+[1.297s] copying debug_tools/bag_printer.py -> /ros/build/debug_tools/build/lib/debug_tools
+[1.307s] running install
+[1.312s] running install_lib
+[1.327s] copying /ros/build/debug_tools/build/lib/debug_tools/bag_printer.py -> /ros/install/debug_tools/lib/python3.12/site-packages/debug_tools
+[1.345s] byte-compiling /ros/install/debug_tools/lib/python3.12/site-packages/debug_tools/bag_printer.py to bag_printer.cpython-312.pyc
+[1.357s] running install_data
+[1.362s] running install_egg_info
+[1.371s] removing '/ros/install/debug_tools/lib/python3.12/site-packages/debug_tools-0.0.0-py3.12.egg-info' (and everything under it)
+[1.397s] Copying ../build/debug_tools/debug_tools.egg-info to /ros/install/debug_tools/lib/python3.12/site-packages/debug_tools-0.0.0-py3.12.egg-info
+[1.526s] running install_scripts
+[1.608s] Installing bag_printer script to /ros/install/debug_tools/lib/debug_tools
+[1.622s] writing list of installed files to '/ros/build/debug_tools/install.log'
+[1.653s] Invoked command in '/ros/debug_tools' returned '0': PYTHONPATH=/ros/build/debug_tools/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/ros/install/debug_tools/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/debug_tools build --build-base /ros/build/debug_tools/build install --record /ros/build/debug_tools/install.log --single-version-externally-managed install_data

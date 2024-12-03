@@ -1,0 +1,51 @@
+[0.094s] Invoking command in '/ros/build/velodyne_driver': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/ros/install/debug_tools:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /ros/build/velodyne_driver -- -j4 -l4
+[0.592s] [ 33%] Built target gtest
+[0.607s] [ 50%] Built target velodyne_input
+[0.620s] [ 50%] Built target gtest_main
+[0.855s] [ 83%] Built target time_test
+[0.860s] [ 83%] Built target velodyne_driver
+[1.058s] [100%] Built target velodyne_driver_node
+[1.175s] Invoked command in '/ros/build/velodyne_driver' returned '0': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/ros/install/debug_tools:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --build /ros/build/velodyne_driver -- -j4 -l4
+[1.226s] Invoking command in '/ros/build/velodyne_driver': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/ros/install/debug_tools:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /ros/build/velodyne_driver
+[1.286s] -- Install configuration: ""
+[1.290s] -- Up-to-date: /ros/install/velodyne_driver/lib/libvelodyne_input.so
+[1.293s] -- Up-to-date: /ros/install/velodyne_driver/lib/libvelodyne_driver.so
+[1.299s] -- Up-to-date: /ros/install/velodyne_driver/lib/velodyne_driver/velodyne_driver_node
+[1.316s] -- Up-to-date: /ros/install/velodyne_driver/include/velodyne_driver
+[1.323s] -- Up-to-date: /ros/install/velodyne_driver/include/velodyne_driver/driver.hpp
+[1.328s] -- Up-to-date: /ros/install/velodyne_driver/include/velodyne_driver/input.hpp
+[1.332s] -- Up-to-date: /ros/install/velodyne_driver/include/velodyne_driver/time_conversion.hpp
+[1.337s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/config
+[1.341s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/config/VLP16-velodyne_driver_node-params.yaml
+[1.345s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/config/VLP32C-velodyne_driver_node-params.yaml
+[1.350s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/config/VLS128-velodyne_driver_node-params.yaml
+[1.354s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch
+[1.359s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLP16-composed-launch.py
+[1.364s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLP16-launch.py
+[1.369s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLP32C-composed-launch.py
+[1.377s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLP32C-launch.py
+[1.382s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLS128-composed-launch.py
+[1.386s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/launch/velodyne_driver_node-VLS128-launch.py
+[1.390s] -- Up-to-date: /ros/install/velodyne_driver/lib/velodyne_driver/vdump
+[1.394s] -- Up-to-date: /ros/install/velodyne_driver/share/ament_index/resource_index/package_run_dependencies/velodyne_driver
+[1.397s] -- Up-to-date: /ros/install/velodyne_driver/share/ament_index/resource_index/parent_prefix_path/velodyne_driver
+[1.403s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/environment/ament_prefix_path.sh
+[1.408s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/environment/ament_prefix_path.dsv
+[1.413s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/environment/path.sh
+[1.417s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/environment/path.dsv
+[1.425s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/local_setup.bash
+[1.431s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/local_setup.sh
+[1.436s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/local_setup.zsh
+[1.441s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/local_setup.dsv
+[1.446s] -- Installing: /ros/install/velodyne_driver/share/velodyne_driver/package.dsv
+[1.470s] -- Up-to-date: /ros/install/velodyne_driver/share/ament_index/resource_index/packages/velodyne_driver
+[1.479s] -- Up-to-date: /ros/install/velodyne_driver/share/ament_index/resource_index/rclcpp_components/velodyne_driver
+[1.483s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/velodyne_driverExport.cmake
+[1.487s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/velodyne_driverExport-noconfig.cmake
+[1.491s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/ament_cmake_export_include_directories-extras.cmake
+[1.501s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/ament_cmake_export_targets-extras.cmake
+[1.510s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/ament_cmake_export_dependencies-extras.cmake
+[1.519s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/velodyne_driverConfig.cmake
+[1.532s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/cmake/velodyne_driverConfig-version.cmake
+[1.541s] -- Up-to-date: /ros/install/velodyne_driver/share/velodyne_driver/package.xml
+[1.560s] Invoked command in '/ros/build/velodyne_driver' returned '0': AMENT_PREFIX_PATH=/ros/install/velodyne_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/ros/install/velodyne_msgs:/ros/install/debug_tools:/opt/ros/rolling LD_LIBRARY_PATH=/ros/install/velodyne_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/ros/install/velodyne_msgs/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/cmake --install /ros/build/velodyne_driver

@@ -1,0 +1,4 @@
+Invoking command in '/ros/build/velodyne_msgs': CMAKE_PREFIX_PATH=/ros/install/debug_tools:/opt/ros/rolling /usr/bin/cmake --build /ros/build/velodyne_msgs -- -j4 -l4
+Invoked command in '/ros/build/velodyne_msgs' returned '0': CMAKE_PREFIX_PATH=/ros/install/debug_tools:/opt/ros/rolling /usr/bin/cmake --build /ros/build/velodyne_msgs -- -j4 -l4
+Invoking command in '/ros/build/velodyne_msgs': CMAKE_PREFIX_PATH=/ros/install/debug_tools:/opt/ros/rolling /usr/bin/cmake --install /ros/build/velodyne_msgs
+Invoked command in '/ros/build/velodyne_msgs' returned '0': CMAKE_PREFIX_PATH=/ros/install/debug_tools:/opt/ros/rolling /usr/bin/cmake --install /ros/build/velodyne_msgs
