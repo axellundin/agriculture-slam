@@ -4,6 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/ros
+      - ./src:/ros
     tty: true
     stdin_open: true

@@ -5,4 +5,4 @@ proposal/*.out
 proposal/*.toc
 
 # rosbag data
-slam-argiculture/data/bags/*
+slam-argiculture/src/data/bags/*
