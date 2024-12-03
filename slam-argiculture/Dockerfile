@@ -1,8 +1,8 @@
-FROM ros:noetic-ros-base
+FROM ros:rolling-ros-base
 
-RUN apt-get update && apt-get install -y curl ros-noetic-catkin
+RUN apt-get update && apt-get install -y curl python3-colcon-common-extensions
 
-RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/rolling/setup.bash" >> ~/.bashrc
 
 COPY ./src/data_files.txt /data_files.txt
 

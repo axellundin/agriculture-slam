@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Source ROS environment
-source /opt/ros/noetic/setup.bash
+source /opt/ros/rolling/setup.bash
 
 # Make this directory into a ros workspace
 cd ros
-catkin_make
+
 
 # Download datasets listed in data_files.txt if they don't exist¨
 for filename in $(cat data_files.txt); do
