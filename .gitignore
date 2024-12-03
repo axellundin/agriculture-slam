@@ -1,0 +1,8 @@
+# latex compile
+proposal/*.aux
+proposal/*.log
+proposal/*.out
+proposal/*.toc
+
+# rosbag data
+slam-argiculture/data/bags/*
