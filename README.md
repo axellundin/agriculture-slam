@@ -53,3 +53,5 @@ docker-compose build
 docker-compose up
 ```
 
+### Downloading datasets
+The desired dataset files from the page https://www.ipb.uni-bonn.de/datasets_IJRR2017/rosbags/160420/ are listed in the `data_files.txt` file.
