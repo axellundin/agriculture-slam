@@ -1,2 +1,0 @@
-[console_scripts]
-bag_printer = debug_tools.bag_printer:main

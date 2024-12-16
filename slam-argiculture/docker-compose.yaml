@@ -1,9 +1,0 @@
-services:
-  ros:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./src:/ros
-    tty: true
-    stdin_open: true
