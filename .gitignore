@@ -3,6 +3,3 @@ proposal/*.aux
 proposal/*.log
 proposal/*.out
 proposal/*.toc
-
-# rosbag data
-slam-argiculture/src/data/bags/*
