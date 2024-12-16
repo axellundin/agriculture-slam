@@ -12,7 +12,7 @@ class SLAM:
         self.pointclouds = []
         self.plotter = Plotter(self)
 
-    def run(self):
+    def run(self): 
         self.plotter.interactive_on()
         
         for i in range(len(self.data_player.laser_data_list)):
