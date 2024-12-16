@@ -29,8 +29,8 @@ class SLAM:
         if len(self.poses) == 0:
             return [float(odometry_frame[0]), float(odometry_frame[1]), float(odometry_frame[2])]
         last_pose = self.poses[-1]
-        delta_x_abs = float(odometry_frame[0]) * np.cos(last_pose[2]) + float(odometry_frame[1]) * np.sin(last_pose[2]) 
-        delta_y_abs = float(odometry_frame[0]) * np.sin(last_pose[2]) - float(odometry_frame[1]) * np.cos(last_pose[2])
+        delta_x_abs = float(odometry_frame[0]) * np.cos(last_pose[2]) - float(odometry_frame[1]) * np.sin(last_pose[2]) 
+        delta_y_abs = float(odometry_frame[0]) * np.sin(last_pose[2]) + float(odometry_frame[1]) * np.cos(last_pose[2])
         delta_theta = float(odometry_frame[2])
         
         return [last_pose[0] + delta_x_abs, last_pose[1] + delta_y_abs, last_pose[2] + delta_theta]
