@@ -49,7 +49,8 @@ class ICP:
         
     def find_correspondences(self) -> None:
         """
-        Optimized version using KD-tree for nearest neighbor search
+        Finds correspondences between current and target point clouds 
+        using KD-tree for nearest neighbor search.
         """
         tree = cKDTree(self.current_points)
         distances, indices = tree.query(self.target_points, k=1)
@@ -61,7 +62,7 @@ class ICP:
 
     def find_closest_index(self) -> None:
         """
-        Removes duplicate correspondences by keeping only the closest matches using NumPy operations.
+        Finds the closest correspondences by removing duplicates.
         If multiple points map to the same target point, only the closest one is kept.
         """
         # Get unique target indices and their first occurrences

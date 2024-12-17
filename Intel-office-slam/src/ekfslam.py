@@ -5,9 +5,9 @@ class EKFSLAM:
         self.poses = []
         self.covariances = [np.zeros((3, 3))]
         self.odometry_transforms = []
+        self.icp_transforms = []
         self.Q = np.eye(3)
         self.R = np.eye(3)
-
 
     def dynamic_model(self, odometry_data):
         """ Performs the dynamic model of the EKFSLAM.
@@ -19,9 +19,10 @@ class EKFSLAM:
                         [0, 0, 1]])
         self.odometry_transforms.append(transform)
         new_pose = self.poses[-1] + transform @ odometry_data
-        self.poses.append(new_pose)
         new_covariance = self.covariances[-1] + transform @ self.covariances[-1] @ transform.T
-        self.covariances.append(self.covariances[-1])
+        
+        self.poses.append(new_pose)
+        self.covariances.append(new_covariance)
 
     def measurement_model(self, transform):
         """ Performs the measurement model of the EKFSLAM.
