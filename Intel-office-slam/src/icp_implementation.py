@@ -2,6 +2,7 @@ import numpy as np
 from play_data import DataPlayer
 from icp_wrapper import lidar_to_points
 from plot import plot_icp_transform
+from scipy.spatial import cKDTree
 
 class ICP:
     """
@@ -48,45 +49,45 @@ class ICP:
         
     def find_correspondences(self) -> None:
         """
-        Finds corresponding points between current and target point clouds
-        using nearest neighbor search. Stores results in self.cores matrix:
-        - cores[0,i]: index in current points
-        - cores[1,i]: index in target points
-        - cores[2,i]: distance between corresponding points
+        Optimized version using KD-tree for nearest neighbor search
         """
+        tree = cKDTree(self.current_points)
+        distances, indices = tree.query(self.target_points, k=1)
+        
         N = self.current_points.shape[0]
-        
-        for i in range(N):
-            min_dist = np.inf
-            idx = -1
-            for j in range(N):
-                dist = np.linalg.norm( self.target_points[i,:] - self.current_points[j,:] )
-                if dist < min_dist:
-                    min_dist = dist
-                    idx = j
-        
-            self.cores[0, i] = i
-            self.cores[1, i] = idx
-            self.cores[2, i] = min_dist
-        
-        
+        self.cores[0, :] = np.arange(N)
+        self.cores[1, :] = indices
+        self.cores[2, :] = distances
+
     def find_closest_index(self) -> None:
         """
-        Removes duplicate correspondences by keeping only the closest matches.
+        Removes duplicate correspondences by keeping only the closest matches using NumPy operations.
         If multiple points map to the same target point, only the closest one is kept.
         """
-        N = self.cores.shape[1]
-        for i in range(N):
-            for j in range(N):
-                if i != j  and self.cores[0, i] != -1 and self.cores[1, i] != -1:
-                    if self.cores[1, i] == self.cores[1, j]:
-                        if self.cores[2, i] <= self.cores[2,j]:
-                            self.cores[1,j] = -1
-                            self.cores[2,j] = -1
-                        else:
-                            self.cores[1,i] = -1
-                            self.cores[2,i] = -1
-                            
+        # Get unique target indices and their first occurrences
+        unique_targets, unique_indices = np.unique(self.cores[1], return_index=True)
+        
+        # Create a mask for valid entries (not -1)
+        valid_mask = self.cores[1] != -1
+        
+        # For each unique target, find the correspondence with minimum distance
+        for target in unique_targets:
+            if target == -1:
+                continue
+            
+            # Find all correspondences to this target
+            target_mask = (self.cores[1] == target) & valid_mask
+            if np.sum(target_mask) > 1:
+                # Get distances for these correspondences
+                distances = self.cores[2, target_mask]
+                # Find the index of minimum distance
+                min_idx = np.where(target_mask)[0][np.argmin(distances)]
+                
+                # Mark all other correspondences as invalid
+                invalid_mask = target_mask.copy()
+                invalid_mask[min_idx] = False
+                self.cores[1:, invalid_mask] = -1
+    
     def find_mean_and_covariance_matrix(self) -> None:
         """
         Computes the mean points and covariance matrix of corresponding points.
