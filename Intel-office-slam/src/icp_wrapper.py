@@ -1,4 +1,5 @@
-from icp.icp import * 
+#from icp.icp import *
+# from icp_implementation import *
 import numpy as np
 
 def lidar_to_points(measurements: list[float])->np.ndarray:
@@ -14,6 +15,8 @@ def lidar_to_points(measurements: list[float])->np.ndarray:
 
     return points
 
-def get_transform(last_points: np.ndarray, new_points: np.ndarray)->np.ndarray:
-    icp_transform = icp(last_points, new_points, point_pairs_threshold=20, max_iterations=1000, )
-    return icp_transform
+# def get_transform(last_points: np.ndarray, new_points: np.ndarray)->np.ndarray:
+#     icp_class = ICP(last_points, new_points, 1e-3, 100)
+#     #icp_transform = icp(last_points, new_points, point_pairs_threshold=20, max_iterations=1000, )
+#     icp_transform = icp_class()
+#     return icp_transform

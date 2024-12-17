@@ -55,3 +55,13 @@ class Plotter:
 
         fig = plt.gcf()
         fig.canvas.draw()
+        
+def plot_icp_transform(pointcloud1, pointcloud2):
+        plt.scatter(pointcloud1[:,0], -1 * pointcloud1[:,1], color='red')
+        plt.scatter(pointcloud2[:,0], -1 * pointcloud2[:,1], color='green')
+        plt.title(f'Point Cloud correspondence')
+        plt.xlabel('X (m)')
+        plt.ylabel('Y (m)')
+        plt.xlim(-10, 10)
+        plt.ylim(-10, 10)
+        plt.show()
