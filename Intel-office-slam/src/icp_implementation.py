@@ -4,8 +4,21 @@ from icp_wrapper import lidar_to_points
 from plot import plot_icp_transform
 
 class ICP:
-    def __init__(self, reference_points, target_points, tol = 1e-1, niter_max = 100):
+    """
+    Implements the Iterative Closest Point algorithm for point cloud registration.
+    Finds the optimal rigid transformation (rotation and translation) between two point sets.
+    """
+    def __init__(self, reference_points: np.ndarray, target_points: np.ndarray, 
+                 tol: float = 1e-1, niter_max: int = 100) -> None:
+        """
+        Initialize ICP with two point clouds to be aligned.
         
+        Args:
+            reference_points: Source point cloud to be transformed
+            target_points: Target point cloud to align with
+            tol: Convergence tolerance
+            niter_max: Maximum number of iterations
+        """
         N = target_points.shape[0]
         self.cores = np.zeros((3, N))
         self.Rot = np.eye(2)
@@ -16,7 +29,11 @@ class ICP:
         self.tol = tol
         self.niter_max = niter_max
     
-    def run(self):
+    def run(self) -> tuple[np.ndarray, np.ndarray]:
+        """
+        Main ICP loop that iteratively finds the best transformation.
+        Returns the final rotation matrix and translation vector.
+        """
         err = self.tol + 1
         niter = 0
         while err > self.tol and niter < self.niter_max:
@@ -29,7 +46,14 @@ class ICP:
         
         return self.Rot, self.Trans
         
-    def find_correspondences(self):
+    def find_correspondences(self) -> None:
+        """
+        Finds corresponding points between current and target point clouds
+        using nearest neighbor search. Stores results in self.cores matrix:
+        - cores[0,i]: index in current points
+        - cores[1,i]: index in target points
+        - cores[2,i]: distance between corresponding points
+        """
         N = self.current_points.shape[0]
         
         for i in range(N):
@@ -46,7 +70,11 @@ class ICP:
             self.cores[2, i] = min_dist
         
         
-    def find_closest_index(self):
+    def find_closest_index(self) -> None:
+        """
+        Removes duplicate correspondences by keeping only the closest matches.
+        If multiple points map to the same target point, only the closest one is kept.
+        """
         N = self.cores.shape[1]
         for i in range(N):
             for j in range(N):
@@ -59,7 +87,11 @@ class ICP:
                             self.cores[1,i] = -1
                             self.cores[2,i] = -1
                             
-    def find_mean_and_covariance_matrix(self):
+    def find_mean_and_covariance_matrix(self) -> None:
+        """
+        Computes the mean points and covariance matrix of corresponding points.
+        These are used to find the optimal rotation and translation.
+        """
         cnt_cores = 0        
         self.Sigma = np.zeros((2,2))
         self.curr_mean = np.zeros(2)
@@ -78,7 +110,11 @@ class ICP:
         self.curr_mean = self.curr_mean / cnt_cores
         self.tar_mean = self.tar_mean / cnt_cores
     
-    def find_rotation_and_translation(self):
+    def find_rotation_and_translation(self) -> None:
+        """
+        Computes optimal rotation and translation using SVD of covariance matrix.
+        Updates the current points using the accumulated transformation.
+        """
         U, _, V = np.linalg.svd(self.Sigma)
         D = np.eye(2)
         if np.linalg.det(U @ V) < 0:
