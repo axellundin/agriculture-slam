@@ -83,17 +83,13 @@ class ICP:
         D = np.eye(2)
         if np.linalg.det(U @ V) < 0:
             D[-1, -1] = -1
+        
         Rot_temp = U @ D @ V
-        #Rot_temp = U @ V
         self.Rot = Rot_temp @ self.Rot
         
         Trans_temp = self.tar_mean - Rot_temp @ self.curr_mean
         self.Trans = self.Trans + Trans_temp
-        
-        # for i in range(self.target_points.shape[0]):
-        #     #self.target_points[i,:] = self.Rot @ self.target_points[i,:] + self.Trans
-        # self.current_points = (self.Rot @ self.current_points.T)
-        # self.current_points = self.current_points.T + self.Trans
+
         self.current_points = (self.reference_points @ self.Rot.T) + self.Trans
         
         
