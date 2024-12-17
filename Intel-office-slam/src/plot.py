@@ -1,6 +1,7 @@
 from simpleicp import PointCloud
 from matplotlib import pyplot as plt
 import numpy as np
+from feature_detection import find_corners_in_frame
 
 class Plotter: 
     def __init__(self, SLAM):
@@ -14,14 +15,25 @@ class Plotter:
         plt.ioff()
 
     def plot_pointcloud_2d(self):
+        if len(self.SLAM.pointclouds) < 2:
+            return
         pointcloud = self.SLAM.pointclouds[-1]
         self.ax1.clear()
-        self.ax1.scatter(pointcloud['x'], -1 * pointcloud['y'])
+        self.ax1.scatter(pointcloud[:,0], pointcloud[:,1])
         self.ax1.set_title(f'Point Cloud - Frame {self.SLAM.data_player.data_frame}')
         self.ax1.set_xlabel('X (m)')
         self.ax1.set_ylabel('Y (m)')
         self.ax1.set_ylim(-10, 10)
         self.ax1.set_xlim(0, 10)
+        corners, line_parameters = find_corners_in_frame(pointcloud)
+        for line in line_parameters:
+            theta, rho = line
+            t = np.linspace(-10, 10, 100)  # Parameter for line equation
+            x = -t * np.sin(theta) + rho * np.cos(theta)  # Parametric x
+            y = t * np.cos(theta) + rho * np.sin(theta)   # Parametric y
+            self.ax1.plot(x, y, 'r-', linewidth=0.5)
+        for corner in corners:
+            self.ax1.scatter(corner[0], corner[1], color='blue')
 
         self.ax2.clear()
         self.ax2.scatter([p[0] for p in self.SLAM.poses], [p[1] for p in self.SLAM.poses])
