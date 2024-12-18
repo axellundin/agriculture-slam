@@ -35,14 +35,28 @@ class ICP:
         Main ICP loop that iteratively finds the best transformation.
         Returns the final rotation matrix and translation vector.
         """
-        err = self.tol + 1
+        prev_error = float('inf')
         niter = 0
-        while err > self.tol and niter < self.niter_max:
+        while niter < self.niter_max:
             self.find_correspondences()
             self.find_closest_index()
             self.find_mean_and_covariance_matrix()
             self.find_rotation_and_translation()
-            err = np.linalg.norm( self.current_points - self.target_points)
+            
+            # Calculate error based on corresponding points, not all points
+            valid_mask = (self.cores[0] != -1) & (self.cores[1] != -1)
+            valid_source_indices = self.cores[0, valid_mask].astype(int)
+            valid_target_indices = self.cores[1, valid_mask].astype(int)
+            
+            current_error = np.mean(np.linalg.norm(
+                self.current_points[valid_source_indices] - 
+                self.target_points[valid_target_indices], axis=1))
+            
+            # Check for convergence
+            if abs(prev_error - current_error) < self.tol:
+                break
+            
+            prev_error = current_error
             niter += 1
         
         return self.Rot, self.Trans
@@ -52,13 +66,18 @@ class ICP:
         Finds correspondences between current and target point clouds 
         using KD-tree for nearest neighbor search.
         """
-        tree = cKDTree(self.current_points)
-        distances, indices = tree.query(self.target_points, k=1)
+        tree = cKDTree(self.target_points)
+        distances, indices = tree.query(self.current_points, k=1)
+        
+        # Filter out correspondences that are too far (outliers)
+        max_distance = np.mean(distances) + 2 * np.std(distances)
+        valid_mask = distances <= max_distance
         
         N = self.current_points.shape[0]
+        self.cores = np.zeros((3, N))
         self.cores[0, :] = np.arange(N)
-        self.cores[1, :] = indices
-        self.cores[2, :] = distances
+        self.cores[1, :] = np.where(valid_mask, indices, -1)
+        self.cores[2, :] = np.where(valid_mask, distances, -1)
 
     def find_closest_index(self) -> None:
         """
@@ -94,57 +113,54 @@ class ICP:
         Computes the mean points and covariance matrix of corresponding points.
         These are used to find the optimal rotation and translation.
         """
-        cnt_cores = 0        
-        self.Sigma = np.zeros((2,2))
-        self.curr_mean = np.zeros(2)
-        self.tar_mean = np.zeros(2)
+        # Get valid correspondences
+        valid_mask = (self.cores[0] != -1) & (self.cores[1] != -1)
+        valid_source_indices = self.cores[0, valid_mask].astype(int)
+        valid_target_indices = self.cores[1, valid_mask].astype(int)
         
-        N = len(self.cores[1])
+        # Compute means
+        self.curr_mean = np.mean(self.current_points[valid_source_indices], axis=0)
+        self.tar_mean = np.mean(self.target_points[valid_target_indices], axis=0)
         
-        for i in range(N):
-            if not self.cores[0,i] == -1 and not self.cores[1,i] == -1:
-                Sigma_new = ( self.target_points[int(self.cores[1,i]),:].T @ self.current_points[int(self.cores[0,i]),:] )
-                self.Sigma = self.Sigma + Sigma_new
-                self.curr_mean = self.curr_mean + self.current_points[int(self.cores[0,i]),:]
-                self.tar_mean = self.tar_mean + self.target_points[int(self.cores[1,i]),:]
-                cnt_cores += 1
+        # Center the points
+        curr_centered = self.current_points[valid_source_indices] - self.curr_mean
+        tar_centered = self.target_points[valid_target_indices] - self.tar_mean
         
-        self.curr_mean = self.curr_mean / cnt_cores
-        self.tar_mean = self.tar_mean / cnt_cores
-    
+        # Compute covariance matrix
+        self.Sigma = tar_centered.T @ curr_centered
+
     def find_rotation_and_translation(self) -> None:
         """
         Computes optimal rotation and translation using SVD of covariance matrix.
         Updates the current points using the accumulated transformation.
         """
-        U, _, V = np.linalg.svd(self.Sigma)
+        U, S, V = np.linalg.svd(self.Sigma)
+        
+        # Ensure proper rotation matrix (handle reflection case)
+        det = np.linalg.det(U @ V)
         D = np.eye(2)
-        if np.linalg.det(U @ V) < 0:
+        if det < 0:
             D[-1, -1] = -1
+        
         Rot_temp = U @ D @ V
-        #Rot_temp = U @ V
         self.Rot = Rot_temp @ self.Rot
         
         Trans_temp = self.tar_mean - Rot_temp @ self.curr_mean
-        self.Trans = self.Trans + Trans_temp
+        self.Trans = Trans_temp + self.Trans
         
-        # for i in range(self.target_points.shape[0]):
-        #     #self.target_points[i,:] = self.Rot @ self.target_points[i,:] + self.Trans
-        # self.current_points = (self.Rot @ self.current_points.T)
-        # self.current_points = self.current_points.T + self.Trans
+        # Update current points
         self.current_points = (self.reference_points @ self.Rot.T) + self.Trans
-        
         
 if __name__=='__main__':
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    frame = 150
+    frame = 80
     laser_data1, _ = data_player.get_frame(frame)
     laser_data2, _ = data_player.get_frame(frame+1)
     pc1 = lidar_to_points(laser_data1)
     pc2 = lidar_to_points(laser_data2)
     
     # Do icp and transform ...
-    icp = ICP(pc1, pc2)
+    icp = ICP(pc1, pc2, tol=1e-1, niter_max=100)
     R, t = icp.run()
     
     print(R)
@@ -155,7 +171,7 @@ if __name__=='__main__':
         pc1_transformed[i,:] = R @ pc1[i,:] + t
     
     plot_icp_transform(pc1, pc2)
-    plot_icp_transform(pc1, pc1_transformed)
+    plot_icp_transform(pc1_transformed, pc2)
     
     
     
