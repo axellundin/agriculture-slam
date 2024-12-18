@@ -1,9 +1,9 @@
-from icp_wrapper import lidar_to_points, get_transform
+from icp_wrapper import lidar_to_points
 from play_data import DataPlayer
 from matplotlib import pyplot as plt
 import numpy as np
 from plot import Plotter
-from feature_detection import find_corners_in_frame
+from filtering import filter_points
 
 class SLAM:
     def __init__(self, laser_data_path: str, odometry_data_path: str):
@@ -20,6 +20,7 @@ class SLAM:
         for i in range(len(self.data_player.laser_data_list)):
             laser_frame, odometry_frame = self.data_player.new_frame()
             pointcloud = lidar_to_points(laser_frame)
+            pointcloud = filter_points(pointcloud)
             self.pointclouds.append(pointcloud)
             self.integrate_new_pose(odometry_frame)
             self.plotter.plot_pointcloud_2d()

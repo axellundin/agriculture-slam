@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from play_data import DataPlayer
 from icp_wrapper import lidar_to_points
+from filtering import filter_points
 
 def detect_corner(line_params: np.ndarray)-> list:
     """
@@ -40,6 +41,8 @@ def hough_transform(pointcloud: np.ndarray, n_theta: int=300, n_rho: int=180, nl
     """
     Hough transform for line detection
     """
+    if len(pointcloud) == 0:
+        return []
     # find maximum distance between points in the point cloud
     max_distance = np.max(np.linalg.norm(pointcloud, axis=1))
 
@@ -72,7 +75,7 @@ def hough_transform(pointcloud: np.ndarray, n_theta: int=300, n_rho: int=180, nl
     for theta_i, rho_i in local_maxima:
         line_parameters.append((theta[theta_i], rho[rho_i]))
 
-    return line_parameters
+    return np.array(line_parameters)
 
 def plot_points_and_hough_lines(pointcloud: np.ndarray, line_parameters: list, corners: list=[]):
     """
@@ -132,18 +135,24 @@ def iterative_line_detection(pointcloud: np.ndarray, nlines: int=3):
     line_params = []
     for i in range(nlines):
         params, pointcloud = _point_line_detection_iteration(pointcloud, line_params)
+        if params is None:  # Stop if no more points to process
+            break
         line_params.append(params)
-    return line_params
+    return np.array(line_params)  # Convert to numpy array at the end
 
 def _point_line_detection_iteration(pointcloud: np.ndarray, line_params: list):
     """
     Detect the line parameters for the pointcloud
     """
+    if len(pointcloud) == 0:
+        return None, pointcloud
+        
     old_pointcloud = pointcloud
-    params = hough_transform(pointcloud, nlines=1)[0]
-    pointcloud = remove_points_on_line(pointcloud, params)
-   # plot_points_and_hough_lines(old_pointcloud, [params])
-    return params, pointcloud
+    params = hough_transform(pointcloud, nlines=1)
+    if len(params) == 0:  # No lines found
+        return None, pointcloud
+    pointcloud = remove_points_on_line(pointcloud, params[0])  # Use params[0] directly
+    return params[0], pointcloud  # Return the first (and only) line parameters
 
 def remove_points_on_line(pointcloud: np.ndarray, line_params: list):
     """
@@ -174,6 +183,7 @@ if __name__ == "__main__":
     for frame in range(50,100):
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
+        pointcloud = filter_points(pointcloud)
         line_parameters = iterative_line_detection(pointcloud, nlines=3)
         corners = detect_corner(line_parameters) 
         plot_points_and_hough_lines(pointcloud, line_parameters, corners)
