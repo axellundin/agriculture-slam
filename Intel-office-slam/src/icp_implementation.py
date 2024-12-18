@@ -103,8 +103,13 @@ class ICP:
         
         for i in range(N):
             if not self.cores[0,i] == -1 and not self.cores[1,i] == -1:
-                Sigma_new = ( self.target_points[int(self.cores[1,i]),:].T @ self.current_points[int(self.cores[0,i]),:] )
-                self.Sigma = self.Sigma + Sigma_new
+                # Sigma_new = ( self.target_points[int(self.cores[1,i]),:].T @ self.current_points[int(self.cores[0,i]),:] )
+                # self.Sigma = self.Sigma + Sigma_new
+                Sigma_new = np.outer(
+                    self.target_points[int(self.cores[1, i]), :] - self.tar_mean,
+                    self.current_points[int(self.cores[0, i]), :] - self.curr_mean
+                )
+                self.Sigma += Sigma_new
                 self.curr_mean = self.curr_mean + self.current_points[int(self.cores[0,i]),:]
                 self.tar_mean = self.tar_mean + self.target_points[int(self.cores[1,i]),:]
                 cnt_cores += 1
@@ -118,11 +123,9 @@ class ICP:
         Updates the current points using the accumulated transformation.
         """
         U, _, V = np.linalg.svd(self.Sigma)
-        D = np.eye(2)
-        if np.linalg.det(U @ V) < 0:
-            D[-1, -1] = -1
+        print(np.linalg.det(U@V))
         
-        Rot_temp = U @ D @ V
+        Rot_temp = U @ V
         self.Rot = Rot_temp @ self.Rot
         
         Trans_temp = self.tar_mean - Rot_temp @ self.curr_mean
@@ -133,7 +136,7 @@ class ICP:
         
 if __name__=='__main__':
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    frame = 150
+    frame = 50
     laser_data1, _ = data_player.get_frame(frame)
     laser_data2, _ = data_player.get_frame(frame+1)
     pc1 = lidar_to_points(laser_data1)
@@ -151,7 +154,7 @@ if __name__=='__main__':
         pc1_transformed[i,:] = R @ pc1[i,:] + t
     
     plot_icp_transform(pc1, pc2)
-    plot_icp_transform(pc1, pc1_transformed)
+    plot_icp_transform(pc1_transformed, pc2)
     
     
     
