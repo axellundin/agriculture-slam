@@ -32,8 +32,8 @@ class ICP:
     
     def run(self) -> tuple[np.ndarray, np.ndarray]:
         """
-        Main ICP loop that iteratively finds the best transformation.
-        Returns the final rotation matrix and translation vector.
+            Main ICP loop that iteratively finds the best transformation.
+            Returns the final rotation matrix and translation vector.
         """
         prev_error = float('inf')
         niter = 0
@@ -153,7 +153,7 @@ class ICP:
         
 if __name__=='__main__':
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    frame = 80
+    frame = 50
     laser_data1, _ = data_player.get_frame(frame)
     laser_data2, _ = data_player.get_frame(frame+1)
     pc1 = lidar_to_points(laser_data1)

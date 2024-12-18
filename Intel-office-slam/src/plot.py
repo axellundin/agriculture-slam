@@ -2,6 +2,7 @@ from simpleicp import PointCloud
 from matplotlib import pyplot as plt
 import numpy as np
 from feature_detection import find_corners_in_frame
+from mapping import Mapper
 
 class Plotter: 
     def __init__(self, SLAM):
@@ -68,6 +69,12 @@ class Plotter:
         fig = plt.gcf()
         fig.canvas.draw()
         
+    def plot_map(self, mapper: Mapper):
+        self.ax1.imshow(mapper.probabilistic_occupancy_grid, cmap='gray')
+        self.ax1.colorbar() 
+        fig = plt.gcf()
+        fig.canvas.draw()
+    
 def plot_icp_transform(pointcloud1, pointcloud2):
         plt.scatter(pointcloud1[:,0], -1 * pointcloud1[:,1], color='red')
         plt.scatter(pointcloud2[:,0], -1 * pointcloud2[:,1], color='green')
@@ -77,3 +84,4 @@ def plot_icp_transform(pointcloud1, pointcloud2):
         plt.xlim(-10, 10)
         plt.ylim(-10, 10)
         plt.show()
+
