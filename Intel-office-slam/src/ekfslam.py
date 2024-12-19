@@ -12,8 +12,8 @@ class EKFSLAM:
         self.innovations = []
         self.kalman_gains = []
         self.H = np.hstack([np.eye(3), -np.eye(3)])
-        self.Q = np.eye(3)
-        self.R = np.eye(6)
+        self.Q = np.diag([0.005, 0.001, 0.0005])
+        self.R = 0.0001 * np.eye(6)
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_update = True):
         self.prediction_step(odometry_data)
@@ -46,7 +46,7 @@ class EKFSLAM:
                       [1, 0, 0, 0, 0, 0],
                       [0, 1, 0, 0, 0, 0],
                       [0, 0, 1, 0, 0, 0]])
-        print(state)
+
         new_pose = G @ state + transform @ np.array(odometry_data, dtype=float)
         new_covariance = G @ covariance @ G.T + self.R
         
@@ -60,7 +60,7 @@ class EKFSLAM:
             points_cloud1 (np.array) a Nx2 vector containing the lidar scans at time k-1
             points_cloud2 (np.array) a Nx2 vector containing the lidar scans at time k
         """
-        icp = ICP(points_cloud1, points_cloud2)
+        icp = ICP(points_cloud2, points_cloud1)
         R, t = icp.run()
     
         M = np.array([[R[0,0], R[0,1], t[0]],
@@ -68,6 +68,7 @@ class EKFSLAM:
                       [0, 0, 1]])
         self.icp_transforms.append(M)
         z = np.array([t[0], t[1], np.atan2(R[1,0], R[0,0])])
+        print("Odometry: ", self.odometry[-1], "ICP: ", z)
         self.measurements.append(z)
   
     def update_step(self):
@@ -80,6 +81,8 @@ class EKFSLAM:
         self.predicted_measurements.append(self.odometry[-1])
         eta = self.measurements[-1] - self.predicted_measurements[-1]
         self.innovations.append(eta)
+        print(f"Innovation: {eta}")
+        print(f"")
         
         mu = mu + K @ eta
         Sigma = (np.eye(6) - K @ H) @ Sigma
