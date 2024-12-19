@@ -25,8 +25,8 @@ class SLAM:
             pointcloud = lidar_to_points(laser_frame)
             pointcloud = filter_points(pointcloud)
             if len(self.slam.poses) == 0: 
-                self.slam.poses.append(np.array([0, 0, 0]))
-                self.slam.covariances.append(np.zeros((3, 3)))
+                self.slam.poses.append(np.array([0, 0, 0, 0, 0, 0]))
+                self.slam.covariances.append(np.zeros((6, 6)))
                 self.pointclouds.append(pointcloud)
                 continue
             self.slam.iteration(odometry_frame, self.pointclouds[-1], pointcloud)
