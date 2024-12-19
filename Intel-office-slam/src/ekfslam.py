@@ -18,8 +18,7 @@ class EKFSLAM:
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_update = True):
         self.prediction_step()
         if perform_update:
-            pass
-        
+            self.update_step() 
         
     def prediction_step(self, odometry_data):
         """ Performs the dynamic model of the EKFSLAM.
@@ -39,7 +38,7 @@ class EKFSLAM:
                               [0, 0, 1],
                               [0, 0, 0],
                               [0, 0, 0],
-                              [0, 0, 0]])S
+                              [0, 0, 0]])
         
         G = np.array([[1, 0, 0, 0, 0, 0],
                       [0, 1, 0, 0, 0, 0],
@@ -71,7 +70,7 @@ class EKFSLAM:
         z = np.array([t[0], t[1], np.atan2(R[1,0], R[0,0])])
         self.measurements.append(z)
   
-    def update(self):
+    def update_step(self):
         Sigma = self.covariances[-1]
         mu = self.poses[-1]
         H = self.H
