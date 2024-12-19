@@ -16,8 +16,9 @@ class EKFSLAM:
         self.R = np.eye(3)
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_update = True):
-        self.prediction_step()
+        self.prediction_step(odometry_data)
         if perform_update:
+            self.measurement(points_cloud1, points_cloud2)
             self.update_step() 
         
     def prediction_step(self, odometry_data):
