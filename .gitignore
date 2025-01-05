@@ -3,3 +3,9 @@ proposal/*.aux
 proposal/*.log
 proposal/*.out
 proposal/*.toc
+
+# All pyc files 
+*.pyc 
+
+# All pycache files
+__pycache__/
