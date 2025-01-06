@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from play_data import DataPlayer
 from icp_wrapper import lidar_to_points
 from filtering import filter_points
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 def detect_corner(line_params: np.ndarray)-> list:
     """
@@ -177,6 +179,114 @@ def find_corners_in_frame(pointcloud: np.ndarray, nlines: int=3):
     corners = detect_corner(line_parameters) 
     return corners, line_parameters
 
+def find_normal_vectors_for_points(pointcloud: np.ndarray):
+    """
+    Find the normal vectors for the points
+    """
+    normal_vectors = []
+    # Take the k nearest neighbors and perform a PCA to find the normal vector
+    k = 4
+    for point in pointcloud:
+        distances = np.linalg.norm(pointcloud - point, axis=1)
+        indices = np.argsort(distances)[:k]
+        neighbors = pointcloud[indices]
+        pca = PCA(n_components=2)
+        pca.fit(neighbors)
+        normal_vectors.append(pca.components_[1] / np.linalg.norm(pca.components_[1]))
+
+    return np.array(normal_vectors)
+
+def calculate_flatness(cluster: np.ndarray):
+    """
+    Calculate the flatness of the explained variances
+    """
+    if len(cluster) <= 2:
+        return 10
+    pca = PCA(n_components=2)
+    pca.fit(cluster)
+
+    # Compute the eigenvalues of the clusters.T @ clusters
+    eigenvalues = np.linalg.eigvals(cluster.T @ cluster)
+    # Return the ratio of the second largest eigenvalue to the largest eigenvalue
+    return (np.min(eigenvalues) / np.max(eigenvalues)) ** 2
+
+def calculate_explained_variance(data: np.ndarray, labels: np.ndarray, centers: np.ndarray) -> float:
+    """
+    Calculate the explained variance ratio for clustering
+    
+    Args:
+        data: Input data array of shape (n_samples, n_features)
+        labels: Cluster labels for each point
+        centers: Cluster centroids of shape (n_clusters, n_features)
+    
+    Returns:
+        float: Explained variance ratio between 0 and 1
+    """
+    # Calculate total variance (sum of squared distances to overall mean)
+    print(data.shape)
+    overall_mean = np.mean(data[:, :], axis=0)
+    total_variance = np.sum((data[:, :] - overall_mean) ** 2)
+    
+    # Calculate within-cluster variance
+    within_variance = np.sum([np.sum((data[labels == i] - centers[i])**2) 
+                            for i in range(len(centers))])
+    
+    # Calculate explained variance ratio
+    explained_variance = 1 - (within_variance / total_variance)
+    return explained_variance
+
+def choose_optimal_k(errors: list, tol: float=0.15):
+    """
+    Choose the optimal k using the elbow method
+    """
+    # Choose the value corresponding to the number coming after the largest drop in flatness    
+    changes = np.diff(errors)
+    optimal_k = np.argmin(changes)
+    return optimal_k + 2
+
+def cluster_normal_vectors(pointcloud: np.ndarray, normal_vectors: np.ndarray):
+    """
+    Cluster the normal vectors using k-means
+    """
+    augmented_vectors = np.hstack((pointcloud,  normal_vectors))
+    explained_variances = []
+    errors = []
+    for k in range(1, 10):
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(augmented_vectors)
+        explained_variances.append(calculate_explained_variance(augmented_vectors, 
+                                                             kmeans.labels_, 
+                                                             kmeans.cluster_centers_))
+    
+        error = sum([calculate_flatness(augmented_vectors[kmeans.labels_ == j, :2]) for j in range(k)])
+        errors.append(error)
+    # Plot explained variance vs number of clusters
+    plt.figure()
+    print(np.array(errors).shape)
+    plt.plot(range(1,10), errors, 'bo-')
+    plt.xlabel('Number of Clusters (k)')
+    plt.ylabel('Flatness Error')
+    plt.title('Flatness Error vs Number of Clusters')
+    plt.grid(True)
+    plt.show()
+    # Choose best k and fit final model
+    best_k = choose_optimal_k(errors)
+    kmeans = KMeans(n_clusters=best_k)
+    kmeans.fit(augmented_vectors)
+    return kmeans.labels_, kmeans.cluster_centers_
+
+def plot_normal_vectors(pointcloud: np.ndarray, normal_vectors: np.ndarray, labels: np.ndarray, centers: np.ndarray):
+    """
+    Plot the pointcloud and the normal vectors
+    """
+    plt.scatter(pointcloud[:, 0], pointcloud[:, 1], c=labels)
+    plt.quiver(pointcloud[:, 0], pointcloud[:, 1], normal_vectors[:, 0], normal_vectors[:, 1], angles='xy', scale_units='xy', scale=5, width=0.0007, headwidth=0.3)
+    # Mark the cluster centers with a large cross in its color and draw the average normal vector of that cluster from that point
+    for i in range(len(centers)):
+        plt.scatter(centers[i, 0], centers[i, 1], marker='x', s=100, c=i)
+        plt.quiver(centers[i, 0], centers[i, 1], centers[i, 2], centers[i, 3], angles='xy', scale_units='xy', scale=1, width=0.007, headwidth=0.3)
+    plt.show()
+
 if __name__ == "__main__":
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
@@ -184,8 +294,11 @@ if __name__ == "__main__":
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
         pointcloud = filter_points(pointcloud)
-        line_parameters = iterative_line_detection(pointcloud, nlines=3)
-        corners = detect_corner(line_parameters) 
-        plot_points_and_hough_lines(pointcloud, line_parameters, corners)
+        # line_parameters = iterative_line_detection(pointcloud, nlines=3)
+        # corners = detect_corner(line_parameters) 
+        # plot_points_and_hough_lines(pointcloud, line_parameters, corners)
+        normal_vectors = find_normal_vectors_for_points(pointcloud)
+        labels, centers = cluster_normal_vectors(pointcloud, normal_vectors)
+        plot_normal_vectors(pointcloud, normal_vectors, labels, centers)
 
         # plot_points_and_hough_lines(pointcloud, [])

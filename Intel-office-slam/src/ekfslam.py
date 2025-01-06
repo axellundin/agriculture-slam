@@ -98,6 +98,8 @@ class EKFSLAM:
         self.predicted_measurements_icp.append(self.odometry[-1])
         eta = self.icp_measurements[-1] - self.predicted_measurements_icp[-1]
         self.innovations.append(eta)
+        print(f"Innovation: {eta}")
+        print(f"")
         
         mu = mu + K @ eta
         Sigma = (np.eye(6) - K @ H) @ Sigma

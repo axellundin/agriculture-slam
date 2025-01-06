@@ -11,7 +11,7 @@ class SLAM:
     def __init__(self, laser_data_path: str, odometry_data_path: str):
         self.data_player = DataPlayer(laser_data_path, odometry_data_path)
         self.plotter = Plotter(self)
-        self.mapper = Mapper(map_size=400, map_resolution=0.07, lidar_range=8, lidar_spatial_tolerance=0.1, lidar_angular_tolerance=np.pi/180*1)
+        self.mapper = Mapper(map_size=400, map_resolution=0.1, lidar_range=5, lidar_spatial_tolerance=0.1, lidar_angular_tolerance=np.pi/180*1)
         self.pointclouds = []
         self.last_odometry = None
         self.slam = EKFSLAM()
