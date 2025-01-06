@@ -12,8 +12,8 @@ class EKFSLAM:
         self.innovations = []
         self.kalman_gains = []
         self.H = np.hstack([np.eye(3), -np.eye(3)])
-        self.Q = np.diag([0.005, 0.001, 0.0005])
-        self.R = 0.0001 * np.eye(6)
+        self.Q = np.diag([1, 1, 0.01]) # Covariance of the measurement
+        self.R = np.diag([0.01, 0.01, 1, 0.01, 0.01, 1]) # Covariance of the process noise
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_update = True):
         self.prediction_step(odometry_data)
@@ -60,7 +60,7 @@ class EKFSLAM:
             points_cloud1 (np.array) a Nx2 vector containing the lidar scans at time k-1
             points_cloud2 (np.array) a Nx2 vector containing the lidar scans at time k
         """
-        icp = ICP(points_cloud2, points_cloud1)
+        icp = ICP(points_cloud2, points_cloud1, tol=1e-7, niter_max=1000)
         R, t = icp.run()
     
         M = np.array([[R[0,0], R[0,1], t[0]],

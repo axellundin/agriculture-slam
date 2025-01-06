@@ -1,304 +1,257 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from play_data import DataPlayer
 from icp_wrapper import lidar_to_points
 from filtering import filter_points
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
-def detect_corner(line_params: np.ndarray)-> list:
+def seed_segment_detection(laser_data: np.ndarray, epsilon: float, delta: float, num_points_per_seed: int, num_points_per_segment: int, start_index: int):
     """
-    Detect all lines in the pointcloud using hough transform
+    Detect segments of points that satisfy the following conditions:
+    - The distance from every point in the seed-segment to the fitting straight line should
+    be less than a given threshold epsilon.
+    - The distance from every point in the seed-segment to the current point should
+    be less than a given threshold delta.
     """
-    # for each pair of lines, calculate the intersection point  
-    corners = []
-    for i in range(len(line_params)):
-        for j in range(i+1, len(line_params)):
-            theta1, rho1 = line_params[i]
-            theta2, rho2 = line_params[j]
-            intersection = calculate_intersection(theta1, rho1, theta2, rho2)
-            if intersection: 
-                corners.append(intersection)
-    return corners
-
-def calculate_intersection(theta1, rho1, theta2, rho2):
-    """
-    Calculate the intersection point of two lines
-    """
-    # check if lines parallel
-    if np.abs(np.cos(theta1) * np.sin(theta2) - np.cos(theta2) * np.sin(theta1)) < 1e-6:
-        return None
-    c1 = np.cos(theta1)
-    s1 = np.sin(theta1)
-    c2 = np.cos(theta2)
-    s2 = np.sin(theta2)
     
-    x = (rho2 * s1 - rho1 * s2) / (s1 * c2 - s2 * c1)
-    y = (rho1 * c2 - rho2 * c1) / (s1 * c2 - s2 * c1)
-    if np.abs(x) > 10 or np.abs(y) > 10:
-        return None
-    return [x, y]
+    num_points = len(laser_data)
+    for i in range(start_index, num_points-num_points_per_segment):
+        flag = True 
+        j = i + num_points_per_seed
+        seed_pos = np.array([i, j])
+        seed_data = laser_data[i:j]
+        seed_fitted_line = fit_line(seed_data)
+        # plot_line_segment(laser_data, seed_data, seed_fitted_line)
+        for k in range(i, j): 
+            d1 = distance_to_predicted_point(seed_fitted_line, laser_data[k])
+            print(f"d1: {d1}")
+            if d1 > delta:
+                flag = False 
+                break
+            d2 = distance_to_line(seed_fitted_line, laser_data[k])
+            print(f"d2: {d2}")
+            if d2 > epsilon:
+                flag = False
+                break 
+            if k < num_points-1:
+                d3 = np.linalg.norm(laser_data[k] - laser_data[k+1])
+                print(f"d3: {d3}")
+                if d3 > 0.5:
+                    flag = False
+                    break
+        if flag: 
+            return seed_fitted_line, seed_data, seed_pos
+    return None, None, None
 
-def hough_transform(pointcloud: np.ndarray, n_theta: int=300, n_rho: int=180, nlines: int=3, plot: bool=False):
+def region_growing(laser_data: np.ndarray, seed_pos: np.ndarray, seed_data: np.ndarray, seed_fitted_line: np.ndarray, epsilon: float, min_len_per_line: int, min_num_points_per_line: int):
     """
-    Hough transform for line detection
+    Region growing algorithm to detect line segments.
     """
-    if len(pointcloud) == 0:
-        return []
-    # find maximum distance between points in the point cloud
-    max_distance = np.max(np.linalg.norm(pointcloud, axis=1))
+    num_points = len(laser_data)
+    line_data = seed_data
+    line_parameters = seed_fitted_line
+    line_length = 0 
+    number_of_points_in_line = 0 
+    i, j = seed_pos
+    P_f = j
+    P_b = i - 1 
 
-    theta = np.linspace(-np.pi/2 + 1e-6, np.pi/2 - 1e-6, n_theta)
-    rho = np.linspace(-max_distance, max_distance, n_rho)
-    theta_rho_map = np.zeros((n_theta, n_rho))
-    rho_step = 2 * max_distance / n_rho
-    
-    for point_idx in range(len(pointcloud)):
-        x, y = pointcloud[point_idx,0], pointcloud[point_idx,1]
-        if x == 0 and y == 0:
-            continue
-        for theta_idx, theta_val in enumerate(theta):
-            rho_val = x * np.cos(theta_val) + y * np.sin(theta_val)
-            rho_idx = int((rho_val + max_distance) / rho_step)
-            if 0 <= rho_idx < n_rho:
-                theta_rho_map[theta_idx, rho_idx] += 1
-   
-    # Find the local maxima in the theta_rho_map
-    local_maxima = np.array(find_local_maxima(theta_rho_map, n_maxima=nlines))
-    # Construct list of line parameter pairs corresponding to the local maxima
-    # plot the theta_rho_map and mark out the local maxima
-    if plot:
-        plt.imshow(theta_rho_map, cmap='gray')
-        plt.colorbar()
-        plt.scatter(local_maxima[:, 1], local_maxima[:, 0], color='red', marker='x')
-        plt.show()
-    
-    line_parameters = []
-    for theta_i, rho_i in local_maxima:
-        line_parameters.append((theta[theta_i], rho[rho_i]))
-
-    return np.array(line_parameters)
-
-def plot_points_and_hough_lines(pointcloud: np.ndarray, line_parameters: list, corners: list=[]):
-    """
-    Plot the points and the hough lines
-    """
-    plt.scatter(pointcloud[:, 0], pointcloud[:, 1], s=10, marker='x')
-    # plot the corners
-    if len(corners) > 0:
-        corners = np.array(corners)
-        plt.scatter(corners[:, 0], corners[:, 1], s=10, marker='o', color='red')
-    for theta, rho in line_parameters:
-        # Create points along the line using parametric form
-        t = np.linspace(-10, 10, 100)  # Parameter for line equation
-        x = -t * np.sin(theta) + rho * np.cos(theta)  # Parametric x
-        y = t * np.cos(theta) + rho * np.sin(theta)   # Parametric y
-        plt.plot(x, y, 'r-', linewidth=0.5)
-    plt.show()
-
-def find_local_maxima(theta_rho_map: np.ndarray, n_maxima: int=10):
-    """
-    Find the local maxima in the theta_rho_map
-    """
-    kernel_size = 3
-    local_maxima = []
-    n_theta, n_rho = theta_rho_map.shape
-    
-    # Add padding to handle boundaries
-    padded_map = np.pad(theta_rho_map, kernel_size, mode='constant', constant_values=0)
-    
-    # Check each point against its neighborhood
-    for i in range(kernel_size, n_theta + kernel_size):
-        for j in range(kernel_size, n_rho + kernel_size):
-            # Extract neighborhood
-            neighborhood = padded_map[i-kernel_size:i+kernel_size+1, 
-                                   j-kernel_size:j+kernel_size+1]
-            center_value = neighborhood[kernel_size, kernel_size]
-            
-            # Remove center value for comparison
-            neighborhood[kernel_size, kernel_size] = -np.inf
-            
-            # Check if center is greater than all neighbors
-            if center_value > np.max(neighborhood):
-                # Convert back to original coordinates
-                local_maxima.append((i-kernel_size, j-kernel_size))
-    
-    # Only keep the n_maxima local maxima
-    local_maxima = sorted(local_maxima, 
-                         key=lambda x: theta_rho_map[x[0], x[1]], 
-                         reverse=True)[:n_maxima]
-    
-    return local_maxima
-
-def iterative_line_detection(pointcloud: np.ndarray, nlines: int=3):
-    """
-    Iteratively detect one line at a time and remove the points that are on the line before the next iteration
-    """
-    line_params = []
-    for i in range(nlines):
-        params, pointcloud = _point_line_detection_iteration(pointcloud, line_params)
-        if params is None:  # Stop if no more points to process
+    while distance_to_line(line_parameters, laser_data[P_f]) < epsilon:
+        if P_f >= num_points-1:
             break
-        line_params.append(params)
-    return np.array(line_params)  # Convert to numpy array at the end
+        line_data = np.vstack((line_data, laser_data[P_f]))
+        line_parameters = fit_line(line_data)
+        P_f += 1
 
-def _point_line_detection_iteration(pointcloud: np.ndarray, line_params: list):
-    """
-    Detect the line parameters for the pointcloud
-    """
-    if len(pointcloud) == 0:
-        return None, pointcloud
-        
-    old_pointcloud = pointcloud
-    params = hough_transform(pointcloud, nlines=1)
-    if len(params) == 0:  # No lines found
-        return None, pointcloud
-    pointcloud = remove_points_on_line(pointcloud, params[0])  # Use params[0] directly
-    return params[0], pointcloud  # Return the first (and only) line parameters
+    P_f -= 1 
 
-def remove_points_on_line(pointcloud: np.ndarray, line_params: list):
-    """
-    Remove the points that are close enough to the line
-    """
-    theta, rho = line_params[0], line_params[1]
-    normal = np.array([np.cos(theta), np.sin(theta)])
-    # One point that lies on the line
-    px = rho * np.cos(theta)
-    py = rho * np.sin(theta)
-    p = np.array([px, py])
-    # Remove the points that are close enough to the line
-    dist = np.abs(np.dot(pointcloud - p, normal))
-    pointcloud = pointcloud[dist > 0.5]
-    return pointcloud
+    while distance_to_line(line_parameters, laser_data[P_b]) < epsilon:
+        if P_b < 0:
+            break
+        line_data = np.vstack((line_data, laser_data[P_b]))
+        line_parameters = fit_line(line_data)
+        P_b -= 1
 
-def find_corners_in_frame(pointcloud: np.ndarray, nlines: int=3):
-    """
-    Find the corners in the pointcloud
-    """
-    line_parameters = iterative_line_detection(pointcloud, nlines=nlines)
-    corners = detect_corner(line_parameters) 
-    return corners, line_parameters
+    P_b += 1 
 
-def find_normal_vectors_for_points(pointcloud: np.ndarray):
-    """
-    Find the normal vectors for the points
-    """
-    normal_vectors = []
-    # Take the k nearest neighbors and perform a PCA to find the normal vector
-    k = 4
-    for point in pointcloud:
-        distances = np.linalg.norm(pointcloud - point, axis=1)
-        indices = np.argsort(distances)[:k]
-        neighbors = pointcloud[indices]
-        pca = PCA(n_components=2)
-        pca.fit(neighbors)
-        normal_vectors.append(pca.components_[1] / np.linalg.norm(pca.components_[1]))
+    line_length = np.linalg.norm(laser_data[P_f] - laser_data[P_b])
+    number_of_points_in_line = len(line_data)
 
-    return np.array(normal_vectors)
+    print(f"line_length: {line_length}, number_of_points_in_line: {number_of_points_in_line}")
 
-def calculate_flatness(cluster: np.ndarray):
-    """
-    Calculate the flatness of the explained variances
-    """
-    if len(cluster) <= 2:
-        return 10
-    pca = PCA(n_components=2)
-    pca.fit(cluster)
+    if line_length >= min_len_per_line and number_of_points_in_line >= min_num_points_per_line:
+        return line_data, line_parameters, np.array([P_b, P_f-1])
+    else:
+        return None, None, None
 
-    # Compute the eigenvalues of the clusters.T @ clusters
-    eigenvalues = np.linalg.eigvals(cluster.T @ cluster)
-    # Return the ratio of the second largest eigenvalue to the largest eigenvalue
-    return (np.min(eigenvalues) / np.max(eigenvalues)) ** 2
-
-def calculate_explained_variance(data: np.ndarray, labels: np.ndarray, centers: np.ndarray) -> float:
+def find_all_line_segments(_laser_data: np.ndarray, epsilon: float, delta: float, num_points_per_seed: int, num_points_per_segment: int, min_len_per_line: int, min_num_points_per_line: int):
     """
-    Calculate the explained variance ratio for clustering
+    Find all line segments in the laser data.
+    """
+    laser_data = _laser_data.copy()
+    line_segments = list()
+    start_index = 0
+    while len(laser_data) > 0:
+        seed_parameters, seed_data, seed_pos = seed_segment_detection(laser_data, epsilon, delta, num_points_per_seed, num_points_per_segment, start_index)
+        if seed_parameters is not None:
+            # plot_line_segment(laser_data, seed_data, seed_parameters)
+            line_data, line_parameters, final_line_pos = region_growing(laser_data, seed_pos, seed_data, seed_parameters, epsilon, min_len_per_line, min_num_points_per_line)
+            if line_data is not None:
+                line_segments.append([line_data, line_parameters, final_line_pos])
+                # plot_line_segment(laser_data, line_data, line_parameters)
+            else:
+                i,j = seed_pos[0], seed_pos[1]
+                start_index = j
+                continue
+            # Remove the the line points from the laser data
+            start_index = final_line_pos[1]
+        else:
+            break
+    # Construct the unmatched points by forming the array with the points not contained in any line segment 
+    unmatched_points = np.array(laser_data)
+    indices_to_remove = set()
+    for line_segment in line_segments:
+        start, end = line_segment[2]
+        indices_to_remove.update(range(int(start), int(end)))
+    unmatched_points = np.delete(unmatched_points, list(indices_to_remove), axis=0)
+    return line_segments, unmatched_points
+
+def overlap_region_processing(laser_data, line_segments):
+    """
+    Process the overlap region between two line segments.
+    """
+    num_lines = len(line_segments)
+    for i in range(num_lines-1):
+        j = i + 1
+        m1, n1 = line_segments[i][2]
+        m2, n2 = line_segments[j][2]
+        if m2 <= n1: 
+            k = 0
+            for k in range(m2, n1):
+                P_k = laser_data[k]
+                line_params_i = line_segments[i][1]
+                d_i_k = distance_to_line(line_params_i, P_k)
+                line_params_j = line_segments[j][1]
+                d_j_k = distance_to_line(line_params_j, P_k)
+                if d_i_k < d_j_k:
+                   continue
+                break
+            n1 = k - 1
+            m2 = k
+        else:
+            break
+        line_segments[i][0] = laser_data[m1:n1]
+        line_segments[i][1] = fit_line(line_segments[i][0])
+        line_segments[i][2] = np.array([m1, n1])
+
+        line_segments[j][0] = laser_data[m2:n2]
+        line_segments[j][1] = fit_line(line_segments[j][0])
+        line_segments[j][2] = np.array([m2, n2])
+    return line_segments
+
+def endpoint_coordinates(line_segments):
+    """
+    Get the endpoints of all line segments.
+    """
+
+    for line in line_segments:
+        a, b, c = line[1]
+        if len(line[0]) == 0:
+            continue
+
+        line_dir =  np.array([-b, a]) / np.sqrt(a**2 + b**2)
+        # Project all point onto the line direction 
+        projections = line[0] @ line_dir
+        min_idx = np.argmin(projections) 
+        max_idx = np.argmax(projections)
+
+        x_0, y_0 = line[0][min_idx]
+        x_f, y_f = line[0][max_idx]  
+
+        x_start = (b**2 * x_0 - a * b * y_0 - a * c) / (a**2 + b**2)
+        y_start = (a**2 * y_0 - a * b * x_0 - b * c) / (a**2 + b**2)
+
+        x_end = (b**2 * x_f - a * b * y_f - a * c) / (a**2 + b**2)
+        y_end = (a**2 * y_f - a * b * x_f - b * c) / (a**2 + b**2)
+        line.append([np.array([x_start, y_start]), np.array([x_end, y_end])])
+    return line_segments
+
+def plot_line_segment(data, seed_data, seed_fitted_line):
+    plt.scatter(data[:,0], data[:,1], c='blue')
+    plt.scatter(seed_data[:,0], seed_data[:,1], c='red')
+    # seed_fitted line is on the form (a, b, c), where ax + by + c = 0
     
-    Args:
-        data: Input data array of shape (n_samples, n_features)
-        labels: Cluster labels for each point
-        centers: Cluster centroids of shape (n_clusters, n_features)
-    
-    Returns:
-        float: Explained variance ratio between 0 and 1
-    """
-    # Calculate total variance (sum of squared distances to overall mean)
-    print(data.shape)
-    overall_mean = np.mean(data[:, :], axis=0)
-    total_variance = np.sum((data[:, :] - overall_mean) ** 2)
-    
-    # Calculate within-cluster variance
-    within_variance = np.sum([np.sum((data[labels == i] - centers[i])**2) 
-                            for i in range(len(centers))])
-    
-    # Calculate explained variance ratio
-    explained_variance = 1 - (within_variance / total_variance)
-    return explained_variance
-
-def choose_optimal_k(errors: list, tol: float=0.15):
-    """
-    Choose the optimal k using the elbow method
-    """
-    # Choose the value corresponding to the number coming after the largest drop in flatness    
-    changes = np.diff(errors)
-    optimal_k = np.argmin(changes)
-    return optimal_k + 2
-
-def cluster_normal_vectors(pointcloud: np.ndarray, normal_vectors: np.ndarray):
-    """
-    Cluster the normal vectors using k-means
-    """
-    augmented_vectors = np.hstack((pointcloud,  normal_vectors))
-    explained_variances = []
-    errors = []
-    for k in range(1, 10):
-        kmeans = KMeans(n_clusters=k)
-        kmeans.fit(augmented_vectors)
-        explained_variances.append(calculate_explained_variance(augmented_vectors, 
-                                                             kmeans.labels_, 
-                                                             kmeans.cluster_centers_))
-    
-        error = sum([calculate_flatness(augmented_vectors[kmeans.labels_ == j, :2]) for j in range(k)])
-        errors.append(error)
-    # Plot explained variance vs number of clusters
-    plt.figure()
-    print(np.array(errors).shape)
-    plt.plot(range(1,10), errors, 'bo-')
-    plt.xlabel('Number of Clusters (k)')
-    plt.ylabel('Flatness Error')
-    plt.title('Flatness Error vs Number of Clusters')
-    plt.grid(True)
+    a, b, c = seed_fitted_line
+    # Get min and max x coordinates of seed data
+    x_min, x_max = np.min(seed_data[:,0]), np.max(seed_data[:,0])
+    x = np.linspace(x_min, x_max, 100)
+    y = -(a*x + c)/b
+    plt.plot(x, y, c='green')
     plt.show()
-    # Choose best k and fit final model
-    best_k = choose_optimal_k(errors)
-    kmeans = KMeans(n_clusters=best_k)
-    kmeans.fit(augmented_vectors)
-    return kmeans.labels_, kmeans.cluster_centers_
 
-def plot_normal_vectors(pointcloud: np.ndarray, normal_vectors: np.ndarray, labels: np.ndarray, centers: np.ndarray):
-    """
-    Plot the pointcloud and the normal vectors
-    """
-    plt.scatter(pointcloud[:, 0], pointcloud[:, 1], c=labels)
-    plt.quiver(pointcloud[:, 0], pointcloud[:, 1], normal_vectors[:, 0], normal_vectors[:, 1], angles='xy', scale_units='xy', scale=5, width=0.0007, headwidth=0.3)
-    # Mark the cluster centers with a large cross in its color and draw the average normal vector of that cluster from that point
-    for i in range(len(centers)):
-        plt.scatter(centers[i, 0], centers[i, 1], marker='x', s=100, c=i)
-        plt.quiver(centers[i, 0], centers[i, 1], centers[i, 2], centers[i, 3], angles='xy', scale_units='xy', scale=1, width=0.007, headwidth=0.3)
+def plot_all_line_segments(line_segments, unmatched_points):
+    # For each line segment, plot its points, its fitted line segment and mark its points with a unique color. The points that are not included in any line should me marked with a cross. 
+
+    unique_colors = plt.cm.rainbow(np.linspace(0, 1, len(line_segments)))
+    for i, line_segment in enumerate(line_segments):
+        if len(line_segment[0]) == 0:
+            continue
+        line_data, line_parameters, final_line_pos, endpoints = line_segment
+        a, b, c = line_parameters
+        x_min, x_max = np.min(line_data[:,0]), np.max(line_data[:,0])
+        x = np.linspace(x_min, x_max, 100)
+        y = -(a*x + c)/b
+        plt.plot(x, y, c=unique_colors[i])
+        plt.scatter(line_data[:,0], line_data[:,1], c=unique_colors[i], marker='v')
+
+        start_point, end_point = endpoints
+        plt.scatter(start_point[0], start_point[1], c='black', marker='o', s=100, facecolors='none')
+        plt.scatter(end_point[0], end_point[1], c='black', marker='o', s=100, facecolors='none')
+    plt.scatter(unmatched_points[:,0], unmatched_points[:,1], c='red', marker='x')
     plt.show()
+
+def fit_line(data: np.ndarray):
+    # construct A matrix
+    A = np.hstack((data, np.ones((len(data), 1))))
+    # Find least square solution to Ax = 0 as the parameters (a, b, c)
+    # enforce norm of one for the solution, using SVD 
+    U, S, Vt = np.linalg.svd(A.T @ A)
+    return Vt[-1]
+
+def get_predicted_point(line_params, current_point):
+    a, b, c = line_params
+    theta = np.arctan2(current_point[1], current_point[0])
+    sin = np.sin(theta)
+    cos = np.cos(theta)
+    x = -c * cos  / (a * cos + b * sin)
+    y = -c * sin / (a * cos + b * sin)
+    return np.array([x, y])
+
+def distance_to_predicted_point(line_params, current_point):
+    predicted_point = get_predicted_point(line_params, current_point)
+    return np.linalg.norm(predicted_point - current_point)
+
+def distance_to_line(line_params, point):
+    a, b, c = line_params
+    x,y = point
+    return np.abs(a*x + b*y + c) / np.sqrt(a**2 + b**2)
+
+
+def feature_detection(laser_data):
+    line_segments, unmatched_points = find_all_line_segments(laser_data, 0.05, 0.05, 4, 4, 0.2, 4)
+    line_segments = overlap_region_processing(laser_data, line_segments)
+    line_segments = endpoint_coordinates(line_segments)
+    return line_segments, unmatched_points
 
 if __name__ == "__main__":
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    for frame in range(50,100):
+    for frame in range(145,200):
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
         pointcloud = filter_points(pointcloud)
-        # line_parameters = iterative_line_detection(pointcloud, nlines=3)
-        # corners = detect_corner(line_parameters) 
-        # plot_points_and_hough_lines(pointcloud, line_parameters, corners)
-        normal_vectors = find_normal_vectors_for_points(pointcloud)
-        labels, centers = cluster_normal_vectors(pointcloud, normal_vectors)
-        plot_normal_vectors(pointcloud, normal_vectors, labels, centers)
 
-        # plot_points_and_hough_lines(pointcloud, [])
+        line_segments, unmatched_points = find_all_line_segments(pointcloud, 0.05, 0.05, 4, 4, 0.2, 4)
+        print(len(line_segments))
+        # line_segments = overlap_region_processing(pointcloud, line_segments)
+        line_segments = endpoint_coordinates(line_segments)
+        plot_all_line_segments(line_segments, unmatched_points)

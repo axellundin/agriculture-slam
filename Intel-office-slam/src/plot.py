@@ -1,7 +1,7 @@
 from simpleicp import PointCloud
 from matplotlib import pyplot as plt
 import numpy as np
-from feature_detection import find_corners_in_frame
+from feature_detection_old import find_corners_in_frame
 from mapping import Mapper
 
 class Plotter: 

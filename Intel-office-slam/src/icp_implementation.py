@@ -153,25 +153,25 @@ class ICP:
         
 if __name__=='__main__':
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    frame = 50
-    laser_data1, _ = data_player.get_frame(frame)
-    laser_data2, _ = data_player.get_frame(frame+1)
-    pc1 = lidar_to_points(laser_data1)
-    pc2 = lidar_to_points(laser_data2)
-    
-    # Do icp and transform ...
-    icp = ICP(pc1, pc2, tol=1e-1, niter_max=100)
-    R, t = icp.run()
-    
-    print(R)
-    print(t)
-    
-    pc1_transformed = np.zeros((pc1.shape[0], 2))
-    for i in range(len(pc1)):
-        pc1_transformed[i,:] = R @ pc1[i,:] + t
-    
-    plot_icp_transform(pc1, pc2)
-    plot_icp_transform(pc1_transformed, pc2)
+    for frame in range(1, 50):
+        laser_data1, _ = data_player.get_frame(frame)
+        laser_data2, _ = data_player.get_frame(frame+1)
+        pc1 = lidar_to_points(laser_data1)
+        pc2 = lidar_to_points(laser_data2)
+        
+        # Do icp and transform ...
+        icp = ICP(pc1, pc2, tol=1e-5, niter_max=1000)
+        R, t = icp.run()
+        
+        print(R)
+        print(t)
+        
+        pc1_transformed = np.zeros((pc1.shape[0], 2))
+        for i in range(len(pc1)):
+            pc1_transformed[i,:] = R @ pc1[i,:] + t
+        
+        plot_icp_transform(pc1, pc2)
+        plot_icp_transform(pc1_transformed, pc2)
     
     
     

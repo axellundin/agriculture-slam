@@ -112,7 +112,7 @@ class Mapper:
         """
         return np.hstack([pose[:2] / self.map_resolution + self.origin_index, pose[2]])
     
-    def draw_map(self, poses):
+    def draw_map(self, poses, features=None):
         """
         Draw the occupancy grid map
         """
@@ -129,6 +129,25 @@ class Mapper:
         for i in range(len(poses) - 1):
             # rescale and shift to origin
             self.ax.plot([poses[i][0] / self.map_resolution + self.origin_index[0], poses[i+1][0] / self.map_resolution + self.origin_index[0]], [poses[i][1] / self.map_resolution + self.origin_index[1], poses[i+1][1] / self.map_resolution + self.origin_index[1]], 'r-')
+
+        if features is not None:
+            for feature in features:
+                if len(feature[0]) == 0:
+                    continue
+                start_point, end_point = feature[3]
+                start_point = start_point / self.map_resolution
+                end_point = end_point / self.map_resolution
+                # Shift relative to robot pose
+                x_R = poses[-1][0] / self.map_resolution + self.origin_index[0]
+                y_R = poses[-1][1] / self.map_resolution + self.origin_index[1]
+                theta_R = poses[-1][2]
+
+                x_s = x_R + start_point[0] * np.cos(-theta_R) + start_point[1] * np.sin(-theta_R)
+                y_s = y_R - start_point[0] * np.sin(-theta_R) + start_point[1] * np.cos(-theta_R)
+                x_e = x_R + end_point[0] * np.cos(-theta_R) + end_point[1] * np.sin(-theta_R)
+                y_e = y_R - end_point[0] * np.sin(-theta_R) + end_point[1] * np.cos(-theta_R)
+                
+                self.ax.scatter([x_s, x_e], [y_s, y_e])
 
         self.ax.set_title('Occupancy Grid Map')
         plt.draw()
