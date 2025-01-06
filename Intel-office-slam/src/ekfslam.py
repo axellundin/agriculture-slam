@@ -3,58 +3,80 @@ from icp_implementation import ICP
 
 class EKFSLAM:
     def __init__(self):
-        self.poses = []
+        self.N = int(0)
+        self.alpha = 1
+        
+        self.means = []
         self.covariances = [np.zeros((3, 3))]
         self.odometry = []
         self.icp_transforms = []
-        self.measurements = []
-        self.predicted_measurements = []
+        self.icp_measurements = []
+        self.predicted_measurements_icp = []
         self.innovations = []
+<<<<<<< HEAD
         self.kalman_gains = []
         self.H = np.hstack([np.eye(3), -np.eye(3)])
         self.Q = np.diag([1, 1, 0.01]) # Covariance of the measurement
         self.R = np.diag([0.01, 0.01, 1, 0.01, 0.01, 1]) # Covariance of the process noise
+=======
+        self.kalman_gains_icp = []
+        self.H_icp = np.hstack([np.eye(3), -np.eye(3)])
+        self.Q_icp = np.diag([10000,10000,1])
+        self.Q_landmarks = np.eye(3)
+        self.R = np.eye(6)     
+        self.map = []
+>>>>>>> 609a3211c9bcbfdbcb98fa0152f43510a1dd1844
     
-    def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_update = True):
+    def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_icp_update = True, detected_landmarks = None):
         self.prediction_step(odometry_data)
-        if perform_update:
-            self.measurement(points_cloud1, points_cloud2)
-            self.update_step() 
+        if perform_icp_update:
+            self.icp_measurement(points_cloud1, points_cloud2)
+            self.icp_update_step() 
+        if detected_landmarks is not None:
+            self.incremental_maximum_likelihood(detected_landmarks)
         
     def prediction_step(self, odometry_data):
         """ Performs the dynamic model of the EKFSLAM.
         Args:
             odometry_data (np.array): The odometry data.
         """
-        state = self.poses[-1]
+        mean = self.means[-1]
         covariance = self.covariances[-1]
         
-        th = state[2]
+        th = mean[2]
         
         c = np.cos(th)
         s = np.sin(th)
-        transform = np.array([[c, -s, 0],
-                              [s, c, 0],
-                              [0, 0, 1],
-                              [0, 0, 0],
-                              [0, 0, 0],
-                              [0, 0, 0]])
+        delta_x = float(odometry_data[0])
+        delta_y = float(odometry_data[1])
+        delta_th = float(odometry_data[2])
+        print("Odometry")
+        print(delta_x, delta_y, delta_th)
+        A = - (delta_x * s + delta_y * c)
+        B = delta_x * c - delta_y * s
         
-        G = np.array([[1, 0, 0, 0, 0, 0],
-                      [0, 1, 0, 0, 0, 0],
-                      [0, 0, 1, 0, 0, 0],
-                      [1, 0, 0, 0, 0, 0],
-                      [0, 1, 0, 0, 0, 0],
-                      [0, 0, 1, 0, 0, 0]])
-
-        new_pose = G @ state + transform @ np.array(odometry_data, dtype=float)
+        G_small = np.array([[1, 0, A, 0, 0, 0],
+                            [0, 1, B, 0, 0, 0],
+                            [0, 0, 1, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0],
+                            [0, 1, 0, 0, 0, 0],
+                            [0, 0, 1, 0, 0, 0]])
+        #print(mean)
+        G = np.zeros((6+2*self.N, 6+2*self.N)) #covariances to zero?
+        G[0:6, 0:6] = G_small
+        new_pose = np.zeros(6)
+        new_pose[0:3] = mean[0:3]
+        new_pose[3:6] = mean[0:3]
+        new_pose[0] = new_pose[0] + delta_x * c - delta_y * s
+        new_pose[1] = new_pose[1] + delta_y * c + delta_x * s
+        new_pose[2] = new_pose[2] + delta_th
         new_covariance = G @ covariance @ G.T + self.R
         
         self.odometry.append(np.array(odometry_data, dtype=float))
-        self.poses.append(new_pose)
+        self.means.append(new_pose) #wrong
         self.covariances.append(new_covariance)
         
-    def measurement(self, points_cloud1, points_cloud2):
+    def icp_measurement(self, points_cloud1, points_cloud2):
         """ Performs icp to get the rotation matrix and translation vector. Returns the homogeneus transform matrix
         Args:
             points_cloud1 (np.array) a Nx2 vector containing the lidar scans at time k-1
@@ -68,18 +90,20 @@ class EKFSLAM:
                       [0, 0, 1]])
         self.icp_transforms.append(M)
         z = np.array([t[0], t[1], np.atan2(R[1,0], R[0,0])])
-        print("Odometry: ", self.odometry[-1], "ICP: ", z)
-        self.measurements.append(z)
+        print("ICP:")
+        print(z)
+        self.icp_measurements.append(z)
   
-    def update_step(self):
+    def icp_update_step(self):
         Sigma = self.covariances[-1]
-        mu = self.poses[-1]
-        H = self.H
-        Q = self.Q
+        mu = self.means[-1]
+        H_small = self.H_icp
+        H = np.hstack((H_small, np.zeros((3, 2*self.N))))
+        Q = self.Q_icp
         K = Sigma @ H.T @ np.linalg.inv(H @ Sigma @ H.T + Q)
-        self.kalman_gains.append(K)
-        self.predicted_measurements.append(self.odometry[-1])
-        eta = self.measurements[-1] - self.predicted_measurements[-1]
+        self.kalman_gains_icp.append(K)
+        self.predicted_measurements_icp.append(self.odometry[-1])
+        eta = self.icp_measurements[-1] - self.predicted_measurements_icp[-1]
         self.innovations.append(eta)
         print(f"Innovation: {eta}")
         print(f"")
@@ -87,5 +111,82 @@ class EKFSLAM:
         mu = mu + K @ eta
         Sigma = (np.eye(6) - K @ H) @ Sigma
         
-        self.poses.append(mu)
+        self.means.append(mu)
         self.covariances.append(Sigma)
+    
+    def incremental_maximum_likelihood(self, detected_landmarks):
+        mu = self.means[-1]
+        Sigma = self.covariances[-1]
+        Q = self.Q_landmarks
+        j = -1 * np.ones(len(detected_landmarks))
+        K_i = []
+        zhat_i = []
+        H_i = []
+        for i in range(len(detected_landmarks)):
+            z = detected_landmarks[i]
+            map = self.map
+            x_lm = mu[0] + z[0] * np.cos(z[1] + mu[2])
+            y_lm = mu[1] + z[0] * np.sin(z[1] + mu[2])
+            s = z[2]
+            lm = np.array([x_lm, y_lm, s])
+            map.append(lm)
+            #delta = np.zeros(2, len(map))
+            H_list = []
+            Psi_list = []
+            Mahalanobis_distances = np.zeros(len(map))
+            zhat = []
+            for k in range(len(map)):
+                delta_x = map[0,k] - mu[0]
+                delta_y = map[1,k] - mu[1]
+                # delta[0,k] = delta_x
+                # delta[1,k] = delta_y
+                # q = delta[:,k].T @ delta[:,k]
+                delta = np.array([delta_x, delta_y])
+                q = np.dot(delta, delta)
+                zhat.append(np.array(np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[2,k]))
+                A = np.vstack(np.eye(3), np.zeros(3, 3))
+                B = np.zeros(6, 2*k - 2 + 3)
+                C = np.vstack(np.zeros(3,3), np.eye(3))
+                D = np.zeros(6, 2*(self.N-k))
+                Fx = np.hstack(A,B,C,D)
+                H = np.array([np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
+                             [delta_y, delta_x, -1, -delta_y, -delta_x, 0],
+                             [0, 0, 0, 0, 0, 1])
+                H = 1/q * H @ Fx
+                H_list.append(H)
+                Psi_list.append(H @ Sigma @ H.T + Q)
+                Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[-1])
+            Mahalanobis_distances[-1] = self.alpha
+            min_Mdist = 100000
+            for k in range(len(map)):
+                if Mahalanobis_distances[k] < min_Mdist:
+                    min_Mdist = Mahalanobis_distances[k]
+                    j[i] = k
+            self.N = max(self.N, j[i])
+            if self.N == j[i]:
+                self.map.append(lm)
+            zhat_i.append(zhat[j])
+            H_i.append(H_list[j[i]][:, 0:self.N])
+            Psi_i = Psi_list[j[i]]
+            K_i.append(Sigma @ H_i[i].T @ np.inv(Psi_i))
+
+        update_mean = np.zeros(len(mu))
+        update_cov = np.zeros(np.size(Sigma))
+        for i in range(len(detected_landmarks)):
+            delta_mean = K_i[i] @ (zhat_i[i] - detected_landmarks[i])
+            delta_cov = K_i[i]@H_i[i]
+            if len(delta_mean) > len(update_mean):
+                np.append(update_mean, 0)
+                np.append(mu, 0)
+            if np.size(delta_cov) > np.size(update_cov):
+                # Append a column of zeros
+                update_cov = np.hstack(( update_cov, np.zeros((np.size(update_cov, 0), 1)) ))
+                Sigma = np.hstack(( Sigma, np.zeros((np.size(Sigma, 0), 1)) ))
+                # Append a row of zeros
+                update_cov = np.vstack(( update_cov, np.zeros((1, np.size(update_cov, 1))) ))
+                Sigma = np.vstack(( Sigma, np.zeros((1, np.size(Sigma, 1))) ))
+            update_mean = update_mean + delta_mean
+            update_cov = update_cov + delta_cov
+        
+        self.means[-1] = mu + update_mean
+        self.covariances[-1] = ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma

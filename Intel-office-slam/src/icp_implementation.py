@@ -10,7 +10,7 @@ class ICP:
     Finds the optimal rigid transformation (rotation and translation) between two point sets.
     """
     def __init__(self, reference_points: np.ndarray, target_points: np.ndarray, 
-                 tol: float = 1e-1, niter_max: int = 100) -> None:
+                 tol: float = 1e-5, niter_max: int = 1000) -> None:
         """
         Initialize ICP with two point clouds to be aligned.
         
