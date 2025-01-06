@@ -13,6 +13,7 @@ class SLAM:
         self.plotter = Plotter(self)
         self.mapper = Mapper(map_size=400, map_resolution=0.07, lidar_range=8, lidar_spatial_tolerance=0.1, lidar_angular_tolerance=np.pi/180*1)
         self.pointclouds = []
+        self.last_odometry = None
         self.slam = EKFSLAM()
 
     def run(self): 
@@ -24,18 +25,20 @@ class SLAM:
             laser_frame = np.array(laser_frame, dtype=float)
             pointcloud = lidar_to_points(laser_frame)
             pointcloud = filter_points(pointcloud)
-            if len(self.slam.poses) == 0: 
-                self.slam.poses.append(np.array([0, 0, 0, 0, 0, 0]))
+            if len(self.slam.means) == 0: 
+                self.slam.means.append(np.array([0, 0, 0, 0, 0, 0]))
                 self.slam.covariances.append(np.zeros((6, 6)))
                 self.pointclouds.append(pointcloud)
                 continue
-            self.slam.iteration(odometry_frame, self.pointclouds[-1], pointcloud)
+            if self.last_odometry is not None:
+                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
+            self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
 
             # Update map
-            if len(self.slam.poses) > 0:
-                self.mapper.update_map(self.slam.poses[-1], laser_frame)
-                self.mapper.draw_map(self.slam.poses)
+            if len(self.slam.means) > 0:
+                self.mapper.update_map(self.slam.means[-1], laser_frame)
+                self.mapper.draw_map(self.slam.means)
             plt.pause(0.001)  # Add small delay between frames
         self.mapper.interactive_off()
 

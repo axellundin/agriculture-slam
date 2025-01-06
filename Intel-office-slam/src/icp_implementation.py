@@ -10,7 +10,7 @@ class ICP:
     Finds the optimal rigid transformation (rotation and translation) between two point sets.
     """
     def __init__(self, reference_points: np.ndarray, target_points: np.ndarray, 
-                 tol: float = 1e-1, niter_max: int = 100) -> None:
+                 tol: float = 1e-5, niter_max: int = 1000) -> None:
         """
         Initialize ICP with two point clouds to be aligned.
         
@@ -153,18 +153,19 @@ class ICP:
         
 if __name__=='__main__':
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    frame = 50
-    laser_data1, _ = data_player.get_frame(frame)
-    laser_data2, _ = data_player.get_frame(frame+1)
+    frame = 128
+    laser_data1, odom1 = data_player.get_frame(frame)
+    laser_data2, odom2 = data_player.get_frame(frame+1)
     pc1 = lidar_to_points(laser_data1)
     pc2 = lidar_to_points(laser_data2)
     
     # Do icp and transform ...
-    icp = ICP(pc1, pc2, tol=1e-1, niter_max=100)
+    icp = ICP(pc1, pc2, tol=1e-5, niter_max=1000)
     R, t = icp.run()
     
     print(R)
     print(t)
+    print(odom1, odom2)
     
     pc1_transformed = np.zeros((pc1.shape[0], 2))
     for i in range(len(pc1)):
