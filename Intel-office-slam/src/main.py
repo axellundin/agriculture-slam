@@ -50,7 +50,31 @@ class SLAM:
                 self.mapper.draw_map(self.slam.means, features=features)
             plt.pause(0.001)  # Add small delay between frames
         self.mapper.interactive_off()
+        self.slam.create_file()
+        
+    def test_file(self):
+            
+        for i in range(25, 160):
+            print(f"Frame {i}")
+            laser_frame, odometry_frame = self.data_player.get_frame(i)
+            # make laser frame into np.array of floats
+            laser_frame = np.array(laser_frame, dtype=float)
+            pointcloud = lidar_to_points(laser_frame)
+            pointcloud = filter_points(pointcloud)
+
+            if len(self.slam.means) == 0: 
+                self.slam.means.append(np.array([0, 0, 0, 0, 0, 0]))
+                self.slam.covariances.append(np.zeros((6, 6)))
+                self.pointclouds.append(pointcloud)
+                continue
+            if self.last_odometry is not None:
+                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
+            self.last_odometry = odometry_frame
+            self.pointclouds.append(pointcloud)           
+        self.slam.create_file()
+        self.slam.plot_results_from_file()
 
 if __name__ == "__main__":
     slam = SLAM("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    slam.run()
+    #slam.run()
+    slam.test_file()

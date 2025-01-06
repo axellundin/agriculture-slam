@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from icp_implementation import ICP
 
 class EKFSLAM:
@@ -15,7 +16,7 @@ class EKFSLAM:
         self.innovations = []
         self.kalman_gains_icp = []
         self.H_icp = np.hstack([np.eye(3), -np.eye(3)])
-        self.Q_icp = np.diag([10000,10000,1])
+        self.Q_icp = np.diag([10000, 10000, 1])
         self.Q_landmarks = np.eye(3)
         self.R = np.eye(6)     
         self.map = []
@@ -183,3 +184,93 @@ class EKFSLAM:
         
         self.means[-1] = mu + update_mean
         self.covariances[-1] = ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma
+        
+    def create_file(self, odometry_filename = "odometry.txt", estpose_filename = "pose.txt"):
+        # Save odometry data
+        odom_pose = np.zeros(3)
+        with open(odometry_filename, "w") as odom_file:
+            for odom_data in self.odometry:
+                # Assuming odom is a numpy array or tuple with numeric values
+                odom_pose[0] = odom_pose[0] + odom_data[0] * np.cos(odom_pose[2]) - odom_data[1] * np.sin(odom_pose[2])
+                odom_pose[1] = odom_pose[1] + odom_data[1] * np.cos(odom_pose[2]) + odom_data[0] * np.sin(odom_pose[2])
+                odom_pose[2] = odom_pose[2] + odom_data[2]
+                odom_pose[2] = (odom_pose[2] + np.pi) % (2 * np.pi) - np.pi
+                odom_file.write(f"{odom_pose[0]:.6f} {odom_pose[1]:.6f} {odom_pose[2]:.6f}\n")
+
+        # Save pose data (x, y, theta)
+        with open(estpose_filename, "w") as pose_file:
+            for pose in self.means:
+                # Assuming pose is a numpy array or tuple with at least 3 elements
+                pose[2] = (pose[2] + np.pi) % (2 * np.pi) - np.pi
+                pose_file.write(f"{pose[0]:.6f} {pose[1]:.6f} {pose[2]:.6f}\n")
+    
+    def plot_results(self):
+        # Process odometry data to compute the trajectory
+        odom_pose = np.zeros(3)
+        odom_trajectory = [odom_pose[:2].copy()]
+        for odom_data in self.odometry:
+            odom_pose[0] += odom_data[0] * np.cos(odom_pose[2]) - odom_data[1] * np.sin(odom_pose[2])
+            odom_pose[1] += odom_data[1] * np.cos(odom_pose[2]) + odom_data[0] * np.sin(odom_pose[2])
+            odom_pose[2] = (odom_pose[2] + odom_data[2] + np.pi) % (2 * np.pi) - np.pi
+            odom_trajectory.append(odom_pose[:2].copy())
+        odom_trajectory = np.array(odom_trajectory)
+
+        # Extract poses for plotting
+        pose_x = np.zeros(len(self.means))
+        pose_y = np.zeros(len(self.means))
+        for i in range(len(self.means)):
+            mean = self.means[i]
+            pose_x[i], pose_y[i] = mean[0], mean[1]
+        plt.ioff()
+        # Plot trajectories
+        plt.figure()
+        plt.plot(odom_trajectory[:, 0], odom_trajectory[:, 1], label="Odometry Trajectory", marker='o')
+        plt.plot(pose_x, pose_y, label="Pose Data", marker='x', linestyle='--')
+
+        # Add labels, legend, and grid
+        plt.xlabel("X Position")
+        plt.ylabel("Y Position")
+        plt.title("Odometry and Pose Data Trajectory")
+        plt.legend()
+        plt.grid(True)
+        plt.axis('equal')
+        plt.show()
+        
+
+    def plot_results_from_file(self, odom_file="odometry.txt", pose_file="pose.txt"):
+        """
+        Reads odometry and pose data from files and plots the trajectories.
+
+        Parameters:
+        - odom_file: Path to the file containing odometry data (default: "odometry.txt").
+        - pose_file: Path to the file containing pose data (default: "pose.txt").
+        """
+        # Load odometry data
+        try:
+            odometry_data = np.loadtxt(odom_file)
+            odom_x, odom_y = odometry_data[:, 0], odometry_data[:, 1]
+        except Exception as e:
+            print(f"Error reading odometry data from {odom_file}: {e}")
+            return
+
+        # Load pose data
+        try:
+            pose_data = np.loadtxt(pose_file)
+            pose_x, pose_y = pose_data[:, 0], pose_data[:, 1]
+        except Exception as e:
+            print(f"Error reading pose data from {pose_file}: {e}")
+            return
+        plt.ioff()
+        # Plot trajectories
+        plt.figure(figsize=(10, 6))
+        plt.plot(odom_x, odom_y, label="Odometry Trajectory", marker='o')
+        plt.plot(pose_x, pose_y, label="Pose Data", marker='x', linestyle='--')
+
+        # Add labels, legend, and grid
+        plt.xlabel("X Position")
+        plt.ylabel("Y Position")
+        plt.title("Odometry and Pose Data Trajectory")
+        plt.legend()
+        plt.grid(True)
+        plt.axis('equal')
+        plt.show()

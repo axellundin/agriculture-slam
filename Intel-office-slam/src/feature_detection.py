@@ -243,7 +243,8 @@ def feature_detection(laser_data):
 
 
 def calculate_convexity(line_segments): 
-    # Assert that there are endpoints for the lines. 
+    # Assert that there are endpoints for the lines.
+    pass
 
 
 
