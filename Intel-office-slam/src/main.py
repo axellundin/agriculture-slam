@@ -45,7 +45,7 @@ class SLAM:
             # plt.show()
             
             # Update map
-            if len(self.slam.poses) > 0:
+            if len(self.slam.means) > 0:
                 self.mapper.update_map(self.slam.means[-1], laser_frame)
                 self.mapper.draw_map(self.slam.means, features=features)
             plt.pause(0.001)  # Add small delay between frames

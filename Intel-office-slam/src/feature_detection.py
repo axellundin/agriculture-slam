@@ -235,14 +235,20 @@ def distance_to_line(line_params, point):
     x,y = point
     return np.abs(a*x + b*y + c) / np.sqrt(a**2 + b**2)
 
-
 def feature_detection(laser_data):
     line_segments, unmatched_points = find_all_line_segments(laser_data, 0.05, 0.05, 4, 4, 0.2, 4)
     line_segments = overlap_region_processing(laser_data, line_segments)
     line_segments = endpoint_coordinates(line_segments)
     return line_segments, unmatched_points
 
+
+def calculate_convexity(line_segments): 
+    # Assert that there are endpoints for the lines. 
+
+
+
 if __name__ == "__main__":
+    # Testing 
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
     for frame in range(145,200):
