@@ -13,10 +13,12 @@ class EKFSLAM:
         self.icp_measurements = []
         self.predicted_measurements_icp = []
         self.innovations = []
-        self.kalman_gains = []
-        self.H = np.hstack([np.eye(3), -np.eye(3)])
-        self.Q = np.diag([1, 1, 0.01]) # Covariance of the measurement
-        self.R = np.diag([0.01, 0.01, 1, 0.01, 0.01, 1]) # Covariance of the process noise
+        self.kalman_gains_icp = []
+        self.H_icp = np.hstack([np.eye(3), -np.eye(3)])
+        self.Q_icp = np.diag([10000,10000,1])
+        self.Q_landmarks = np.eye(3)
+        self.R = np.eye(6)     
+        self.map = []
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_icp_update = True, detected_landmarks = None):
         self.prediction_step(odometry_data)
