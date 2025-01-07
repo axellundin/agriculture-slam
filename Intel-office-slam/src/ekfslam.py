@@ -109,9 +109,6 @@ class EKFSLAM:
         self.means.append(mu)
         self.covariances.append(Sigma)
     
-    def outlier_detection(self, detected_landarks):
-        pass
-    
     def incremental_maximum_likelihood(self, detected_landmarks):
         mu = self.means[-1]
         Sigma = self.covariances[-1]
