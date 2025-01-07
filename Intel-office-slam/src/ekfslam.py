@@ -18,6 +18,7 @@ class EKFSLAM:
         self.H_icp = np.hstack([np.eye(3), -np.eye(3)])
         self.Q_icp = np.diag([10000, 10000, 1])
         self.Q_landmarks = np.eye(3)
+        self.Mahalanobis_threshold = 1 #for outlier detection
         self.R = np.eye(6)     
         self.map = []
     
@@ -108,6 +109,9 @@ class EKFSLAM:
         self.means.append(mu)
         self.covariances.append(Sigma)
     
+    def outlier_detection(self, detected_landarks):
+        pass
+    
     def incremental_maximum_likelihood(self, detected_landmarks):
         mu = self.means[-1]
         Sigma = self.covariances[-1]
@@ -153,9 +157,10 @@ class EKFSLAM:
             Mahalanobis_distances[-1] = self.alpha
             min_Mdist = 100000
             for k in range(len(map)):
-                if Mahalanobis_distances[k] < min_Mdist:
-                    min_Mdist = Mahalanobis_distances[k]
-                    j[i] = k
+                if not Mahalanobis_distances[k] > self.Mahalanobis_threshold: #Outlier detection
+                    if Mahalanobis_distances[k] < min_Mdist:
+                        min_Mdist = Mahalanobis_distances[k]
+                        j[i] = k
             self.N = max(self.N, j[i])
             if self.N == j[i]:
                 self.map.append(lm)
