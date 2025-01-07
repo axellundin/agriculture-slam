@@ -110,6 +110,7 @@ class EKFSLAM:
         self.covariances.append(Sigma)
     
     def incremental_maximum_likelihood(self, detected_landmarks):
+        print(f"Processing {len(detected_landmarks)} landmarks")
         mu = self.means[-1]
         Sigma = self.covariances[-1]
         Q = self.Q_landmarks
@@ -160,6 +161,7 @@ class EKFSLAM:
                         j[i] = k
             self.N = max(self.N, j[i])
             if self.N == j[i]:
+                print(f"Adding landmark")
                 self.map.append(lm)
             zhat_i.append(zhat[j])
             H_i.append(H_list[j[i]][:, 0:self.N])

@@ -7,7 +7,7 @@ from filtering import filter_points
 from mapping import Mapper
 from ekfslam import EKFSLAM
 from landmark_tracking import LandmarkTracker
-from feature_detection import feature_detection
+from feature_detection import get_features, feature_detection
 
 class SLAM:
     def __init__(self, laser_data_path: str, odometry_data_path: str):
@@ -30,15 +30,21 @@ class SLAM:
             pointcloud = filter_points(pointcloud)
             features, _ = feature_detection(pointcloud)
 
+
             if len(self.slam.means) == 0: 
                 self.slam.means.append(np.array([0, 0, 0, 0, 0, 0]))
                 self.slam.covariances.append(np.zeros((6, 6)))
                 self.pointclouds.append(pointcloud)
                 continue
+
+            landmarks = get_features(pointcloud)
+            self.slam.incremental_maximum_likelihood(landmarks)
+            
             if self.last_odometry is not None:
                 self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
+
 
             # self.landmark_tracker.add_landmarks(self.slam.poses[-1], features)
             # self.landmark_tracker.draw_landmarks()
@@ -76,5 +82,5 @@ class SLAM:
 
 if __name__ == "__main__":
     slam = SLAM("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    #slam.run()
-    slam.test_file()
+    slam.run()
+    # slam.test_file()
