@@ -1,88 +1,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from feature_detection import get_features
 
-class Landmark: 
-    def __init__(self):
-        self.likelihood = 0.5
-
-class CornerLandmark(Landmark):
-    def __init__(self, position):
-        super().__init__()
-        self.type = "CORNER"
+class ProvisionedLandmark:
+    def __init__(self, position, bearing):
         self.position = position
+        self.bearing = bearing
+        self.likelihood = 0.5
+        self.sigma = 0.1
+
+    def compute_likelihood(self, robot_pose, observed_corner): 
+       # Shift into robots frame of reference (in x, y)
+       predicted_measurement = self.position - robot_pose[0:2]
+       # rotate into robots frame of reference (in x, y)
+       predicted_measurement = np.array([predicted_measurement[0] * np.cos(robot_pose[2]) + predicted_measurement[1] * np.sin(robot_pose[2]),
+                                        -predicted_measurement[0] * np.sin(robot_pose[2]) + predicted_measurement[1] * np.cos(robot_pose[2])])
+       # Compute likelihood from mahalanobis distance using comparison of bearings.
+       mahalanobis_distance = np.linalg.norm(predicted_measurement - observed_corner)
+       likelihood = 1 / (2 * np.pi * self.sigma) * np.exp(-0.5 * mahalanobis_distance**2 / self.sigma**2)
+       return likelihood
     
-    def calculate_likelihood(self, observed_corner):
-        # Calculate the likelihood of the observed corner being the landmark
-        # Use the distance between the observed corner and the landmark position
-        # Use the likelihood threshold to determine if the landmark is visible
-        pass
+    def update_position(self, new_position, new_bearing, new_likelihood):
+        self.position = (self.position + new_position) / 2
+        self.bearing = (self.bearing + new_bearing) / 2
+        self.likelihood = (self.likelihood + new_likelihood) / 2
 
-    def update_likelihood(self, likelihood):
-        pass 
+class LandmarkTracker: 
+    def __init__(self):
+        self.provisioned_landmarks = []
 
-class LineLandmark(Landmark):
-    def __init__(self, start_point, end_point):
-        super().__init__()
-        self.type = "LINE_SEGMENT"
-        self.start_point = start_point
-        self.end_point = end_point
-    
-    def update_likelihood(self, likelihood):
-        pass 
+    def update_landmarks(self, laser_data):
+        features = get_features(laser_data)
+        self.provisioned_landmarks.append(features)
+        self.landmark_map[features] = len(self.provisioned_landmarks) - 1
 
-class LandmarkTracker:
-    def __init__(self, likelihood_threshold=0.9, corner_likelihood_threshold=0.9):
-        self.landmarks = []
-        self.landmark_provisioning_list = []
-        self.likelihood_threshold = likelihood_threshold
-        self.corner_likelihood_threshold = corner_likelihood_threshold
+    def get_landmarks(self):
+        return self.provisioned_landmarks
 
-    # def correlate_landmarks(self, line_segments):
-    #     # Correlate endpoints with existing landmarks and provisioned landmarks.
-    #     # If a landmark has high enough likelihood, update the landmark position
-    #     # If a observation does not correlate to any landmark, provision a new landmark
-
-    #     observed_corners = []
-    #     for line_segment in line_segments:
-    #         endpoints = line_segment[3]
-    #         observed_corners.append(endpoints[0])
-    #         observed_corners.append(endpoints[1])
-
-    #     for landmark in self.landmarks:
-    #         if landmark.type == "CORNER":
-    #             likelihood = landmark.calculate_likelihood(observed_corners)
-    #             if likelihood > self.corner_likelihood_threshold:
-    #                 landmark.update_likelihood(likelihood)
-
-    def add_landmarks(self, robot_pose, line_segments):
-        for line_segment in line_segments:
-            endpoints = line_segment[3] 
-            start_point = endpoints[0]
-            end_point = endpoints[1]
-            shifted_start_point = self.shift_position(start_point, robot_pose)
-            shifted_end_point = self.shift_position(end_point, robot_pose)
-            self.landmarks.append(CornerLandmark(shifted_start_point))
-            self.landmarks.append(CornerLandmark(shifted_end_point))
-            self.landmarks.append(LineLandmark(shifted_start_point, shifted_end_point))
-
-    def shift_position(self, position, robot_pose):
-        x = position[0]
-        y = position[1]
-        theta = robot_pose[2]
-        x_new = robot_pose[0] + x * np.cos(theta) + y * np.sin(theta)
-        y_new = robot_pose[1] - x * np.sin(theta) + y * np.cos(theta)
-        return np.array([x_new, y_new])
-
-    def update_landmarks(self, line_segments):
-        pass
-
-    def update_landmark_provisioning_list(self, landmark_provisioning_list):
-        self.landmark_provisioning_list = landmark_provisioning_list
-
-    def draw_landmarks(self):
-        print(f"Landmarks: {self.landmarks}")
-        for landmark in self.landmarks: 
-            if landmark.type == "LINE_SEGMENT":
-                plt.plot([landmark.start_point[0], landmark.end_point[0]], [landmark.start_point[1], landmark.end_point[1]], color='red')
-            elif landmark.type == "CORNER":
-                plt.scatter(landmark.position[0], landmark.position[1], color='blue')

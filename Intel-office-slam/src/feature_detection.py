@@ -3,6 +3,8 @@ from play_data import DataPlayer
 from icp_wrapper import lidar_to_points
 from filtering import filter_points
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 
 def seed_segment_detection(laser_data: np.ndarray, epsilon: float, delta: float, num_points_per_seed: int, num_points_per_segment: int, start_index: int):
     """
@@ -241,11 +243,162 @@ def feature_detection(laser_data):
     line_segments = endpoint_coordinates(line_segments)
     return line_segments, unmatched_points
 
+def remove_duplicate_endpoints(endpoints):
+    """
+    Remove duplicate endpoints from the line segments.
+    """
+    filtered_endpoints = []
+    for i in range(len(endpoints)):
+        for endpoint in endpoints[i]:
+            flag = True
+            for j in range(i+1, len(endpoints)):
+                for endpoint2 in endpoints[j]:
+                    if np.linalg.norm(endpoint - endpoint2) < 0.05:
+                        flag = False
+                        break
+            if flag:
+                filtered_endpoints.append(endpoint)
+    return filtered_endpoints
 
-def calculate_convexity(line_segments): 
+
+def filter_endpoints_by_eigenvalue_ratio(laser_data, endpoints, eigenvalue_ratio_threshold=0.1, neighborhood_radius=0.4, min_num_neighbors=8): 
+    """ 
+    Compute the eigenvalue ratio for each endpoint and filter out the endpoints with a ratio less than a threshold. 
+    """
     # Assert that there are endpoints for the lines. 
+    filtered_endpoints = []
+    # Find neighbors within a radius of the point 
+    for point in endpoints: 
+        # Find all neighbors within a radius of the point 
+        neighbors = laser_data[np.linalg.norm(laser_data - point, axis=1) < neighborhood_radius]
 
+        # If neighbors less than min_num_neighbors, skip 
+        if len(neighbors) < min_num_neighbors:
+            continue
+        # Perform PCA on the neighborhood of the points 
+        pca = PCA(n_components=2)
+        pca.fit(neighbors)
+        eigenvalues = pca.explained_variance_
+        smallest_eigenvalue = np.min(eigenvalues)
+        largest_eigenvalue = np.max(eigenvalues)
+        eigenvalue_ratio = np.abs(smallest_eigenvalue / largest_eigenvalue)
+        # If eigenvalue ratio is greater than threshold, save endpoint
+        if eigenvalue_ratio >= eigenvalue_ratio_threshold:
+            filtered_endpoints.append(point)
+            
+    return filtered_endpoints
 
+def filter_endpoints_by_harris_measure(laser_data, endpoints, neighborhood_radius=0.3, k=0.005, threshold=0.01):
+    """
+    Filter endpoints by the Harris measure.
+    """
+    filtered_endpoints = []
+    for endpoint in endpoints:
+        neighbors = laser_data[np.linalg.norm(laser_data - endpoint, axis=1) < neighborhood_radius]
+        # Compute second moment matrix for the neighborhood of the point 
+        I_xx = np.sum(neighbors[:,0]**2)
+        I_yy = np.sum(neighbors[:,1]**2)
+        I_xy = np.sum(neighbors[:,0] * neighbors[:,1])
+        I = np.array([[I_xx, I_xy], [I_xy, I_yy]]) 
+        eigenvalues = np.linalg.eigvals(I)
+        # Compute the Harris measure
+        # harris_measure = eigenvalues[0] * eigenvalues[1] - k * (eigenvalues[0] + eigenvalues[1])**2 
+        # Normalize eigenvalues
+        eigenvalues = eigenvalues / np.linalg.norm(eigenvalues)
+        harris_measure = eigenvalues[0] * eigenvalues[1] / (eigenvalues[0] + eigenvalues[1])
+        print(f"Harris measure: {harris_measure}")
+        if harris_measure >= threshold:
+            filtered_endpoints.append(endpoint)
+    return filtered_endpoints
+
+def compute_corner_orientation(laser_data, filtered_endpoints, neighborhood_radius=0.3):
+    """ 
+    Compute the orientation of the corner using PCA on each of the segments. 
+    """
+    oriented_corners = []
+    for endpoint in filtered_endpoints: 
+        # Find all neighbors within a radius of the point 
+        neighbors = laser_data[np.linalg.norm(laser_data - endpoint, axis=1) < neighborhood_radius]
+
+        try: 
+            # Cluster into two groups with k-means 
+            kmeans = KMeans(n_clusters=2)
+            kmeans.fit(neighbors)
+            cluster_centers = kmeans.cluster_centers_
+            # compute the principal direction of each cluster 
+            pca1 = PCA(n_components=2)
+            pca1.fit(neighbors[kmeans.labels_ == 0])
+            pca2 = PCA(n_components=2)
+            pca2.fit(neighbors[kmeans.labels_ == 1])
+            # Compute vectors from endpoint to cluster centers used to make sure that the vectors are oriented correctly
+            vector1 = cluster_centers[0] - endpoint
+            vector2 = cluster_centers[1] - endpoint
+
+            # Choose the direction with the largest eigenvalue
+            idx1 = np.argmax(pca1.explained_variance_) 
+            idx2 = np.argmax(pca2.explained_variance_)
+            minimum_principal_direction1 = pca1.components_[idx1] * np.sign(np.dot(vector1, pca1.components_[idx1]))
+            minimum_principal_direction2 = pca2.components_[idx2] * np.sign(np.dot(vector2, pca2.components_[idx2]))
+            # Compute the angle between the two principal directions 
+            print(f"PCA 1: {pca1.components_}")
+            print(f"PCA 2: {pca2.components_}")
+            # normalize before computing angle
+            minimum_principal_direction1 = minimum_principal_direction1 / np.linalg.norm(minimum_principal_direction1)
+            minimum_principal_direction2 = minimum_principal_direction2 / np.linalg.norm(minimum_principal_direction2)
+
+            angle1 = np.arctan2(minimum_principal_direction1[1], minimum_principal_direction1[0])
+            angle2 = np.arctan2(minimum_principal_direction2[1], minimum_principal_direction2[0])
+
+            bearing = ((angle1 + angle2) / 2 + np.pi )
+            oriented_corners.append([endpoint, bearing, angle1, angle2])
+        except:
+            continue
+    return oriented_corners
+
+def plot_oriented_corners(pointcloud, oriented_corners):
+    """ 
+    Draws an error from the corners to their endpoints on top of the pointcloud. 
+    """
+    plt.scatter(pointcloud[:,0], pointcloud[:,1], c='blue')
+    for corner in oriented_corners: 
+        endpoint, angle, angle1, angle2 = corner
+        plt.scatter(endpoint[0], endpoint[1], c='red')
+        plt.arrow(endpoint[0], endpoint[1], np.cos(angle), np.sin(angle), head_width=0.05, head_length=0.05, fc='red', ec='red')
+        plt.arrow(endpoint[0], endpoint[1], np.cos(angle1), np.sin(angle1), head_width=0.05, head_length=0.05, fc='green', ec='green')
+        plt.arrow(endpoint[0], endpoint[1], np.cos(angle2), np.sin(angle2), head_width=0.05, head_length=0.05, fc='blue', ec='blue')
+    plt.show()
+
+def convert_position_to_range_bearing(oriented_corners):
+    """
+    Convert the position of the corner to range and bearing.
+    """
+    observations = []
+    for corner in oriented_corners:
+        d  = np.linalg.norm(corner[0]) 
+        theta = np.arctan2(corner[0][1], corner[0][0]) 
+        signature = corner[1]
+        observations.append(np.array([d, theta, signature]))
+    return observations
+
+def get_features(laser_data):
+    """
+    Get the corner features from the laser data.
+    Returns features as observations on the form (d, theta, signature). 
+    The signature is given as the bearing of the corner. 
+    """
+    # Find all line segments
+    line_segments, unmatched_points = find_all_line_segments(laser_data, 0.05, 0.05, 4, 4, 0.2, 4)
+    line_segments = overlap_region_processing(laser_data, line_segments)
+    line_segments = endpoint_coordinates(line_segments)
+    # Get endpoints from line segments
+    endpoints = [line[3] for line in line_segments]
+    # Remove duplicate endpoints
+    endpoints_without_duplicates = remove_duplicate_endpoints(endpoints)
+    # Filter endpoints by eigenvalue ratio
+    filtered_endpoints = filter_endpoints_by_eigenvalue_ratio(laser_data, endpoints_without_duplicates)
+    # Compute the orientation of the corners
+    oriented_corners = compute_corner_orientation(laser_data, filtered_endpoints)
+    return convert_position_to_range_bearing(oriented_corners)
 
 if __name__ == "__main__":
     # Testing 
@@ -260,4 +413,10 @@ if __name__ == "__main__":
         print(len(line_segments))
         # line_segments = overlap_region_processing(pointcloud, line_segments)
         line_segments = endpoint_coordinates(line_segments)
-        plot_all_line_segments(line_segments, unmatched_points)
+        endpoints = [line[3] for line in line_segments]
+        endpoints_without_duplicates = remove_duplicate_endpoints(endpoints)
+        filtered_endpoints = filter_endpoints_by_eigenvalue_ratio(pointcloud, endpoints_without_duplicates)
+        # filtered_endpoints = filter_endpoints_by_harris_measure(pointcloud, endpoints_without_duplicates)
+        oriented_corners = compute_corner_orientation(pointcloud, filtered_endpoints)
+        plot_oriented_corners(pointcloud, oriented_corners)
+        # plot_all_line_segments(line_segments, unmatched_points)
