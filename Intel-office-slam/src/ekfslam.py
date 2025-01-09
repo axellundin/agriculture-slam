@@ -143,7 +143,7 @@ class EKFSLAM:
                 A = np.vstack([np.eye(3), np.zeros((3, 3))])
                 B = np.zeros((6, 2*(k+1) - 2))
                 C = np.vstack([np.zeros((3,3)), np.eye(3)])
-                D = np.zeros((6, 2*(self.N-k)))
+                D = np.zeros((6, 2*(len(map)-k-1)))
                 Fx = np.hstack([A,B,C,D])
                 #print(Fx)
                 H = np.array([[np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
@@ -151,6 +151,8 @@ class EKFSLAM:
                              [0, 0, 0, 0, 0, 1]])
                 H = 1/q * H @ Fx
                 H_list.append(H)
+                print(H)
+                print(Sigma)
                 Psi_list.append(H @ Sigma @ H.T + Q)
                 Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[k])
             Mahalanobis_distances[-1] = self.alpha
@@ -170,8 +172,11 @@ class EKFSLAM:
             print(Psi_i)
             K_i.append(Sigma @ H_i[i].T @ np.linalg.inv(Psi_i))
 
+
         update_mean = np.zeros(len(mu))
         update_cov = np.zeros(Sigma.shape)
+
+
         for i in range(len(detected_landmarks)):
             delta_mean = K_i[i] @ (zhat_i[i] - detected_landmarks[i])
             delta_cov = K_i[i]@H_i[i]
@@ -189,7 +194,9 @@ class EKFSLAM:
             update_cov = update_cov + delta_cov
         
         self.means[-1] = mu + update_mean
+        print(f"Sigma: {Sigma}")
         self.covariances[-1] = ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma
+        print(f"Update Cov: {self.covariances[-1]}")
     
     def plot_results(self):
         # Process odometry data to compute the trajectory
