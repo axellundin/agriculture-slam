@@ -53,6 +53,7 @@ class DataPlayer:
         return len(self.laser_data_list), len(self.odometry_data_list)
 
 if __name__ == "__main__":
+    # Testing
     data_dir = "../dataset_intel"
     laser_data_path = os.path.join(data_dir, "intel_LASER_.txt")
     odometry_data_path = os.path.join(data_dir, "intel_ODO.txt")

@@ -17,7 +17,6 @@ class SLAM:
         self.pointclouds = []
         self.last_odometry = None
         self.slam = EKFSLAM()
-        self.landmark_tracker = LandmarkTracker()
 
     def run(self): 
         # self.mapper.interactive_on()
@@ -30,7 +29,6 @@ class SLAM:
             pointcloud = filter_points(pointcloud)
             features, _ = feature_detection(pointcloud)
 
-
             if len(self.slam.means) == 0: 
                 self.slam.means.append(np.array([0, 0, 0, 0, 0, 0]))
                 self.slam.covariances.append(np.zeros((6, 6)))
@@ -39,16 +37,11 @@ class SLAM:
 
             landmarks = get_features(pointcloud)
             self.slam.incremental_maximum_likelihood(landmarks)
-            
+
             if self.last_odometry is not None:
                 self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
-
-
-            # self.landmark_tracker.add_landmarks(self.slam.poses[-1], features)
-            # self.landmark_tracker.draw_landmarks()
-            # plt.show()
             
             # Update map
             if len(self.slam.means) > 0:
@@ -76,7 +69,8 @@ class SLAM:
             if self.last_odometry is not None:
                 self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
             self.last_odometry = odometry_frame
-            self.pointclouds.append(pointcloud)           
+            self.pointclouds.append(pointcloud)
+                
         self.slam.create_file()
         self.slam.plot_results_from_file()
 
