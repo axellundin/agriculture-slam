@@ -114,7 +114,7 @@ class EKFSLAM:
         mu = self.means[-1]
         Sigma = self.covariances[-1]
         Q = self.Q_landmarks
-        j = -1 * np.ones(len(detected_landmarks))
+        j = -1 * np.ones(len(detected_landmarks), dtype=int)
         K_i = []
         zhat_i = []
         H_i = []
@@ -132,26 +132,27 @@ class EKFSLAM:
             Mahalanobis_distances = np.zeros(len(map))
             zhat = []
             for k in range(len(map)):
-                delta_x = map[0,k] - mu[0]
-                delta_y = map[1,k] - mu[1]
+                delta_x = map[k][0] - mu[0]
+                delta_y = map[k][1] - mu[1]
                 # delta[0,k] = delta_x
                 # delta[1,k] = delta_y
                 # q = delta[:,k].T @ delta[:,k]
                 delta = np.array([delta_x, delta_y])
                 q = np.dot(delta, delta)
-                zhat.append(np.array(np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[2,k]))
-                A = np.vstack(np.eye(3), np.zeros(3, 3))
-                B = np.zeros(6, 2*k - 2 + 3)
-                C = np.vstack(np.zeros(3,3), np.eye(3))
-                D = np.zeros(6, 2*(self.N-k))
-                Fx = np.hstack(A,B,C,D)
-                H = np.array([np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
+                zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[k][2]]))
+                A = np.vstack([np.eye(3), np.zeros((3, 3))])
+                B = np.zeros((6, 2*(k+1) - 2))
+                C = np.vstack([np.zeros((3,3)), np.eye(3)])
+                D = np.zeros((6, 2*(self.N-k)))
+                Fx = np.hstack([A,B,C,D])
+                #print(Fx)
+                H = np.array([[np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
                              [delta_y, delta_x, -1, -delta_y, -delta_x, 0],
-                             [0, 0, 0, 0, 0, 1])
+                             [0, 0, 0, 0, 0, 1]])
                 H = 1/q * H @ Fx
                 H_list.append(H)
                 Psi_list.append(H @ Sigma @ H.T + Q)
-                Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[-1])
+                Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[k])
             Mahalanobis_distances[-1] = self.alpha
             min_Mdist = 100000
             for k in range(len(map)):
@@ -163,13 +164,14 @@ class EKFSLAM:
             if self.N == j[i]:
                 print(f"Adding landmark")
                 self.map.append(lm)
-            zhat_i.append(zhat[j])
-            H_i.append(H_list[j[i]][:, 0:self.N])
+            zhat_i.append(zhat[j[i]])
+            H_i.append(H_list[j[i]])
             Psi_i = Psi_list[j[i]]
-            K_i.append(Sigma @ H_i[i].T @ np.inv(Psi_i))
+            print(Psi_i)
+            K_i.append(Sigma @ H_i[i].T @ np.linalg.inv(Psi_i))
 
         update_mean = np.zeros(len(mu))
-        update_cov = np.zeros(np.size(Sigma))
+        update_cov = np.zeros(Sigma.shape)
         for i in range(len(detected_landmarks)):
             delta_mean = K_i[i] @ (zhat_i[i] - detected_landmarks[i])
             delta_cov = K_i[i]@H_i[i]
