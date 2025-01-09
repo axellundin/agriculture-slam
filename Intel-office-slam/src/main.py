@@ -71,8 +71,8 @@ class SLAM:
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
                 
-        self.slam.create_file()
-        self.slam.plot_results_from_file()
+        # self.slam.create_file()
+        # self.slam.plot_results_from_file()
 
 if __name__ == "__main__":
     slam = SLAM("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")

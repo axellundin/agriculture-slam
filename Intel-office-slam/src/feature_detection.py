@@ -154,7 +154,7 @@ def endpoint_coordinates(line_segments):
     """
     Get the endpoints of all line segments.
     """
-
+    new_line_segments = []
     for line in line_segments:
         a, b, c = line[1]
         if len(line[0]) == 0:
@@ -174,8 +174,10 @@ def endpoint_coordinates(line_segments):
 
         x_end = (b**2 * x_f - a * b * y_f - a * c) / (a**2 + b**2)
         y_end = (a**2 * y_f - a * b * x_f - b * c) / (a**2 + b**2)
-        line.append([np.array([x_start, y_start]), np.array([x_end, y_end])])
-    return line_segments
+        endpoints = [np.array([x_start, y_start]), np.array([x_end, y_end])]
+        new_line_segments.append([line[0], line[1], line[2], endpoints])
+
+    return new_line_segments
 
 def plot_line_segment(data, seed_data, seed_fitted_line):
     plt.scatter(data[:,0], data[:,1], c='blue')
