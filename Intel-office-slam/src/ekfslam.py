@@ -36,7 +36,8 @@ class EKFSLAM:
         Args:
             odometry_data (np.array): The odometry data.
         """
-        mean = self.means[-1]
+        mean = self.means[-1].copy()
+
         covariance = self.covariances[-1]
         
         th = mean[2]
@@ -63,19 +64,26 @@ class EKFSLAM:
         #G = np.zeros((6+3*self.N, 6+3*self.N))
         G = np.eye(6+3*self.N)
         G[0:6, 0:6] = G_small
+    
         new_pose = np.zeros(6)
         new_pose[0:3] = mean[0:3]
         new_pose[3:6] = mean[0:3]
         new_pose[0] = new_pose[0] + delta_x * c - delta_y * s
         new_pose[1] = new_pose[1] + delta_y * c + delta_x * s
         new_pose[2] = new_pose[2] + delta_th
+
         # print(f"Sigma = {covariance}]")
         # print(f"G = {G}]")
         new_covariance = G @ covariance @ G.T + Fx.T @ self.R @ Fx
         
         self.odometry.append(np.array(odometry_data, dtype=float))
-        self.means.append(self.means[-1])
-        self.means[-1][0:6] = new_pose
+
+
+        new_mean = np.ones(len(mean))
+        new_mean[0:6] = new_pose
+        new_mean[6:] = mean[6:]
+
+        self.means.append(new_mean)
         self.covariances.append(new_covariance)
         
     def icp_measurement(self, points_cloud1, points_cloud2):
@@ -161,11 +169,13 @@ class EKFSLAM:
             for k in range(N):
                 # print(f"k: {k}")
                 # print(f"Signature: {map[k+2]}")
-                delta_x = map[k] - mu[0]
-                delta_y = map[k+1] - mu[1]
+                delta_x = map[3*k] - mu[0]
+                delta_y = map[3*k+1] - mu[1]
                 delta = np.array([delta_x, delta_y])
+                print(f"map[k]: {map[3*k]}, mu[k]: {mu[0]}")
+                print(f"map[k+1]: {map[3*k+1]}, mu[k+1]: {mu[1]}")
                 q = np.dot(delta, delta)
-                zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[k+2]]))
+                zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[3*k+2]]))
                 A = np.vstack([np.eye(3), np.zeros((3, 3))])
                 B = np.zeros((6, 3*k + 3))
                 C = np.vstack([np.zeros((3,3)), np.eye(3)])
@@ -224,7 +234,7 @@ class EKFSLAM:
             # print(f"mu: {mu}, {len(mu)=}")
             
             # print(f"sz : {sz}")
-            # print(f"Result of te operation: {K_i[i] @ (detected_landmarks[i] - zhat_i[i])}")
+            # print(f"Inovation: {(detected_landmarks[i] - zhat_i[i])}, zhat: {zhat_i[i]}")
             # print(f"Left side: {update_mean[0:sz]}")
             update_mean[0:sz] += K_i[i] @ (detected_landmarks[i] - zhat_i[i])
             #print(f"K_i: {K_i[i]}")
