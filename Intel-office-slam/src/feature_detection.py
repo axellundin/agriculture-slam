@@ -378,7 +378,8 @@ def convert_position_to_range_bearing(oriented_corners):
     for corner in oriented_corners:
         d  = np.linalg.norm(corner[0]) 
         theta = np.arctan2(corner[0][1], corner[0][0]) 
-        signature = corner[1]
+        signature = (corner[1] + np.pi) % (2*np.pi) - np.pi
+
         observations.append(np.array([d, theta, signature]))
     return observations
 
@@ -406,7 +407,7 @@ if __name__ == "__main__":
     # Testing 
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    for frame in range(80,83):
+    for frame in range(80,100):
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
         pointcloud = filter_points(pointcloud)

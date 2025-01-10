@@ -5,7 +5,7 @@ from icp_implementation import ICP
 class EKFSLAM:
     def __init__(self):
         self.N = int(0)
-        self.alpha = 0.2
+        self.alpha = 15
         
         self.means = []
         self.covariances = [np.zeros((3, 3))]
@@ -16,10 +16,10 @@ class EKFSLAM:
         self.innovations = []
         self.kalman_gains_icp = []
         self.H_icp = np.hstack([np.eye(3), -np.eye(3)])
-        self.Q_icp = np.diag([10000, 10000, 1])
-        self.Q_landmarks = np.eye(3)
-        self.Mahalanobis_threshold = 1 #for outlier detection
-        self.R = np.eye(6)
+        self.Q_icp = np.diag([10000, 10000, 0.0001])
+        self.Q_landmarks = 10 * np.diag([0.01, 0.01, 0.05])
+        self.Mahalanobis_threshold = 70 #for outlier detection
+        self.R = 0.01 * np.diag([0.05, 0.05, 0.01, 0.05, 0.05, 0.01])
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_icp_update = True, detected_landmarks = None):
         self.prediction_step(odometry_data)
@@ -28,8 +28,7 @@ class EKFSLAM:
             self.icp_update_step() 
         if detected_landmarks is not None:
             if len(detected_landmarks) != 0:
-                print(f"detected landmarks: {detected_landmarks}")
-                self.incremental_maximum_likelihood(detected_landmarks)
+                self.update_landmarks(detected_landmarks)
         
     def prediction_step(self, odometry_data):
         """ Performs the dynamic model of the EKFSLAM.
@@ -124,7 +123,149 @@ class EKFSLAM:
         
         self.means.append(mu)
         self.covariances.append(Sigma)
-    
+
+    def update_landmarks(self, detected_landmarks):
+        """
+        Updates the SLAM state with newly detected landmarks using EKF update equations.
+        
+        Args:
+            detected_landmarks: List of landmark measurements, each containing [range, bearing, signature]
+        """
+        if not detected_landmarks:
+            return
+            
+        mu = self.means[-1]
+        Sigma = self.covariances[-1]
+        counter = 0
+        # Process each detected landmark
+        for z in detected_landmarks:
+            # 1. Transform measurement to global coordinates
+            cos_theta = np.cos(z[1] + mu[2])
+            sin_theta = np.sin(z[1] + mu[2])
+            landmark_global = np.array([
+                mu[0] + z[0] * cos_theta,  # x
+                mu[1] + z[0] * sin_theta,  # y
+                z[2]                       # signature
+            ])
+            
+            # 2. Data association
+            best_match_idx = -1
+            min_distance = 100000 #wrong
+            
+            # For each existing landmark, compute Mahalanobis distance
+            for k in range(self.N):
+                map_idx = 6 + 3*k  # Skip pose states (6) and index into map
+                existing_landmark = mu[map_idx:map_idx+3]
+                
+                # Compute measurement prediction (h function)
+                delta_x = existing_landmark[0] - mu[0]
+                delta_y = existing_landmark[1] - mu[1]
+                q = delta_x**2 + delta_y**2
+                zhat = np.array([
+                    np.sqrt(q),
+                    np.atan2(delta_y, delta_x) - mu[2],
+                    existing_landmark[2]
+                ])
+                
+                # Compute Jacobians
+                H = self._compute_measurement_jacobian(delta_x, delta_y, q, k)
+                
+                # Innovation covariance
+                S = H @ Sigma @ H.T + self.Q_landmarks
+                
+                # Mahalanobis distance
+                innovation = z - zhat
+                distance = innovation.T @ np.linalg.inv(S) @ innovation
+                print(f"Distance: {distance}")
+                # Only consider landmarks within the Mahalanobis threshold
+                if distance > self.Mahalanobis_threshold:
+                    continue
+                
+                if distance < min_distance:
+                    counter += 1 
+                    min_distance = distance
+                    best_match_idx = k
+            print(f"Counter: {counter}")
+            # 3. Handle the landmark
+            if best_match_idx == -1 and min_distance > self.alpha:
+                # New landmark - extend state and covariance
+                self.N += 1
+                mu = np.hstack([mu, landmark_global])
+                
+                # Compute Jacobians for new landmark
+                G_z = np.array([
+                    [cos_theta, -z[0]*sin_theta, 0],
+                    [sin_theta, z[0]*cos_theta, 0],
+                    [0, 0, 1]
+                ])
+                G_R = np.array([
+                    [1, 0, -z[0]*sin_theta, 0, 0, 0],
+                    [0, 1, z[0]*cos_theta, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0]
+                ])
+                
+                # Extend covariance matrix
+                Sigma_new = G_R @ Sigma[0:6, 0:6] @ G_R.T + G_z @ self.Q_landmarks @ G_z.T
+                Sigma_cross = G_R @ Sigma[0:6, :]
+                
+                Sigma_temp = np.vstack((Sigma, Sigma_cross))
+                Sigma = np.hstack((Sigma_temp, np.vstack((Sigma_cross.T, Sigma_new))))
+                    
+            else:
+                # Update existing landmark
+                map_idx = 6 + 3*best_match_idx
+
+                print(f"Updating landmark {best_match_idx}: {mu[map_idx:map_idx+3]}")
+                print(f"Landmark was associated with observation: {z}")
+
+                H = self._compute_measurement_jacobian(
+                    mu[map_idx] - mu[0],
+                    mu[map_idx+1] - mu[1],
+                    (mu[map_idx] - mu[0])**2 + (mu[map_idx+1] - mu[1])**2,
+                    best_match_idx
+                )
+                
+                # Kalman gain
+                S = H @ Sigma @ H.T + self.Q_landmarks
+                K = Sigma @ H.T @ np.linalg.inv(S)
+                
+                # Update state and covariance
+                innovation = z - self._predict_measurement(mu, best_match_idx)
+                mu = mu + K @ innovation
+                Sigma = (np.eye(len(mu)) - K @ H) @ Sigma
+        
+        # Store updated state and covariance
+        self.means.append(mu)
+        self.covariances.append(Sigma)
+
+    def _compute_measurement_jacobian(self, delta_x, delta_y, q, landmark_idx):
+        """Helper function to compute the measurement Jacobian H."""
+        # Create base Jacobian for pose and current landmark
+        H_base = np.array([
+            [np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
+            [delta_y, delta_x, -1, -delta_y, -delta_x, 0],
+            [0, 0, 0, 0, 0, 1]
+        ]) / q
+        
+        # Extend H to full state size
+        H = np.zeros((3, 6 + 3*self.N))
+        H[:, :6] = H_base[:, :6]  # Copy pose Jacobian
+        H[:, 6 + 3*landmark_idx:9 + 3*landmark_idx] = H_base[:, 3:6]  # Copy landmark Jacobian
+        
+        return H
+
+    def _predict_measurement(self, mu, landmark_idx):
+        """Helper function to compute the predicted measurement for a landmark."""
+        map_idx = 6 + 3*landmark_idx
+        delta_x = mu[map_idx] - mu[0]
+        delta_y = mu[map_idx+1] - mu[1]
+        q = delta_x**2 + delta_y**2
+        
+        return np.array([
+            np.sqrt(q),
+            np.atan2(delta_y, delta_x) - mu[2],
+            mu[map_idx+2]
+        ])
     def incremental_maximum_likelihood(self, detected_landmarks):
         print(f"Processing {len(detected_landmarks)} landmarks")
         mu = self.means[-1]
@@ -134,18 +275,18 @@ class EKFSLAM:
         K_i = []
         zhat_i = []
         H_i = []
+
         for i in range(len(detected_landmarks)):
             z = detected_landmarks[i]
             map = self.means[-1][6:]
+            # Compute the global coordinates of the detected landmark
             cos = np.cos(z[1] + mu[2])
             sin = np.sin(z[1] + mu[2])
             x_lm = mu[0] + z[0] * cos
             y_lm = mu[1] + z[0] * sin
             s = z[2]
             lm = np.array([x_lm, y_lm, s])
-            # Provisional extended state
-            # print(f"map: {map}")
-            # print(f"lm : {lm}")
+            # Provisional extended map
             map = np.hstack((map, lm))
             N = int(len(map)/3)
             # Provisional extended covariance
@@ -171,9 +312,8 @@ class EKFSLAM:
                 # print(f"Signature: {map[k+2]}")
                 delta_x = map[3*k] - mu[0]
                 delta_y = map[3*k+1] - mu[1]
+                print(f"delta_x: {delta_x}, delta_y: {delta_y}")
                 delta = np.array([delta_x, delta_y])
-                print(f"map[k]: {map[3*k]}, mu[k]: {mu[0]}")
-                print(f"map[k+1]: {map[3*k+1]}, mu[k+1]: {mu[1]}")
                 q = np.dot(delta, delta)
                 zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[3*k+2]]))
                 A = np.vstack([np.eye(3), np.zeros((3, 3))])
@@ -190,21 +330,27 @@ class EKFSLAM:
                 # print(f"map: {map}")
                 # print(f"H: {H}")
                 # print(f"Sigma_prov: {Sigma_prov}")              
-                Psi_list.append(H @ Sigma_prov @ H.T + Q)
-                Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[k])
+                Psi = H @ Sigma_prov @ H.T + Q
+                Psi_list.append(Psi)
+                Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi) @ (z - zhat[k])
             Mahalanobis_distances[-1] = self.alpha
+            print(f"Mahalanobis distances: {Mahalanobis_distances}")
             min_Mdist = 100000
             for k in range(N):
-                if not Mahalanobis_distances[k] > self.Mahalanobis_threshold: #Outlier detection
-                    if Mahalanobis_distances[k] < min_Mdist:
-                        min_Mdist = Mahalanobis_distances[k]
-                        j[i] = k
+                if Mahalanobis_distances[k] > self.Mahalanobis_threshold: #Outlier detection
+                    continue
+                if Mahalanobis_distances[k] < min_Mdist:
+                    min_Mdist = Mahalanobis_distances[k]
+                    j[i] = k
+            print(f"Detected landmark {i} associated with landmark {j[i]}")
+            print(f"Global coordinates of detected landmark: {lm}")
+            print(f"Global coordinates of the associated landmark: {map[3*j[i]:3*j[i]+3]}")
             # print(f"Before assigning: N = {N}, N_global = {self.N}, j = {j[i]}")
             # self.N = max(self.N, j[i]+1)
             # print(f"After assigning: N = {self.N}")
             # if self.N == j[i]+1:
             if j[i] + 1 > self.N:
-                print(f"Adding landmark to the state")
+                print(f"Adding landmark to the state: {lm}")
                 self.N = j[i] + 1
                 # extend the state
                 mu = np.hstack([mu, lm])             
@@ -247,7 +393,8 @@ class EKFSLAM:
             update_cov[0:sz, 0:sz] += K_i[i] @ H_i[i]
         
         self.means.append(mu + update_mean)
-        print(f"Update: {self.means[-1][0:3]}")
+        print(f"Updated position: {self.means[-1][0:3]}")
+        print(f"Update delta: {update_mean}")
         print(f"Map: {self.means[-1][3:]}")
         #print(f"Sigma: {Sigma}")
         self.covariances.append( ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma )

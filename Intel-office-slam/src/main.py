@@ -39,14 +39,20 @@ class SLAM:
             landmarks = get_features(pointcloud)
 
             if self.last_odometry is not None:
-                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update = False, detected_landmarks = landmarks)
+                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update = True, detected_landmarks = landmarks)
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
             
+            map_data = self.slam.means[-1][6:]
+            landmarks_as_points = []
+            for i in range(len(map_data)//3):
+                landmarks_as_points.append(np.array([map_data[3*i], map_data[3*i+1]]))
+
             # Update map
             if len(self.slam.means) > 0:
                 self.mapper.update_map(self.slam.means[-1], laser_frame)
-                self.mapper.draw_map(self.slam.means, features=features)
+                self.mapper.draw_map(self.slam.means, features=[], landmarks=landmarks_as_points)
+
             plt.pause(0.001)  # Add small delay between frames
         self.mapper.interactive_off()
         #self.slam.create_file()
@@ -67,7 +73,7 @@ class SLAM:
                 self.pointclouds.append(pointcloud)
                 continue
             if self.last_odometry is not None:
-                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
+                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=False)
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
                 

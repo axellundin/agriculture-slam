@@ -112,7 +112,7 @@ class Mapper:
         """
         return np.hstack([pose[:2] / self.map_resolution + self.origin_index, pose[2]])
     
-    def draw_map(self, poses, features=None):
+    def draw_map(self, poses, features=None, landmarks=None):
         """
         Draw the occupancy grid map
         """
@@ -148,6 +148,13 @@ class Mapper:
                 y_e = y_R - end_point[0] * np.sin(-theta_R) + end_point[1] * np.cos(-theta_R)
                 
                 self.ax.scatter([x_s, x_e], [y_s, y_e])
+
+        if landmarks is not None: 
+                lm = np.zeros((2,len(landmarks)))  
+                for i in range(len(landmarks)):
+                    lm[0,i] = landmarks[i][0] / self.map_resolution + self.origin_index[0]
+                    lm[1,i] = landmarks[i][1] / self.map_resolution + self.origin_index[1]
+                self.ax.scatter(lm[0,:], lm[1,:], c='green', marker='x')
 
         self.ax.set_title('Occupancy Grid Map')
         plt.draw()
