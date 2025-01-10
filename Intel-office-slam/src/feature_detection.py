@@ -25,18 +25,18 @@ def seed_segment_detection(laser_data: np.ndarray, epsilon: float, delta: float,
         # plot_line_segment(laser_data, seed_data, seed_fitted_line)
         for k in range(i, j): 
             d1 = distance_to_predicted_point(seed_fitted_line, laser_data[k])
-            print(f"d1: {d1}")
+            #print(f"d1: {d1}")
             if d1 > delta:
                 flag = False 
                 break
             d2 = distance_to_line(seed_fitted_line, laser_data[k])
-            print(f"d2: {d2}")
+            #print(f"d2: {d2}")
             if d2 > epsilon:
                 flag = False
                 break 
             if k < num_points-1:
                 d3 = np.linalg.norm(laser_data[k] - laser_data[k+1])
-                print(f"d3: {d3}")
+                #print(f"d3: {d3}")
                 if d3 > 0.5:
                     flag = False
                     break
@@ -78,7 +78,7 @@ def region_growing(laser_data: np.ndarray, seed_pos: np.ndarray, seed_data: np.n
     line_length = np.linalg.norm(laser_data[P_f] - laser_data[P_b])
     number_of_points_in_line = len(line_data)
 
-    print(f"line_length: {line_length}, number_of_points_in_line: {number_of_points_in_line}")
+    #print(f"line_length: {line_length}, number_of_points_in_line: {number_of_points_in_line}")
 
     if line_length >= min_len_per_line and number_of_points_in_line >= min_num_points_per_line:
         return line_data, line_parameters, np.array([P_b, P_f-1])
@@ -308,7 +308,7 @@ def filter_endpoints_by_harris_measure(laser_data, endpoints, neighborhood_radiu
         # Normalize eigenvalues
         eigenvalues = eigenvalues / np.linalg.norm(eigenvalues)
         harris_measure = eigenvalues[0] * eigenvalues[1] / (eigenvalues[0] + eigenvalues[1])
-        print(f"Harris measure: {harris_measure}")
+        #print(f"Harris measure: {harris_measure}")
         if harris_measure >= threshold:
             filtered_endpoints.append(endpoint)
     return filtered_endpoints
@@ -342,8 +342,8 @@ def compute_corner_orientation(laser_data, filtered_endpoints, neighborhood_radi
             minimum_principal_direction1 = pca1.components_[idx1] * np.sign(np.dot(vector1, pca1.components_[idx1]))
             minimum_principal_direction2 = pca2.components_[idx2] * np.sign(np.dot(vector2, pca2.components_[idx2]))
             # Compute the angle between the two principal directions 
-            print(f"PCA 1: {pca1.components_}")
-            print(f"PCA 2: {pca2.components_}")
+            # print(f"PCA 1: {pca1.components_}")
+            # print(f"PCA 2: {pca2.components_}")
             # normalize before computing angle
             minimum_principal_direction1 = minimum_principal_direction1 / np.linalg.norm(minimum_principal_direction1)
             minimum_principal_direction2 = minimum_principal_direction2 / np.linalg.norm(minimum_principal_direction2)
@@ -412,7 +412,7 @@ if __name__ == "__main__":
         pointcloud = filter_points(pointcloud)
 
         line_segments, unmatched_points = find_all_line_segments(pointcloud, 0.05, 0.05, 4, 4, 0.2, 4)
-        print(len(line_segments))
+        #print(len(line_segments))
         # line_segments = overlap_region_processing(pointcloud, line_segments)
         line_segments = endpoint_coordinates(line_segments)
         endpoints = [line[3] for line in line_segments]
