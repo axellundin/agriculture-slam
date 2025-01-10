@@ -255,7 +255,7 @@ def remove_duplicate_endpoints(endpoints):
             flag = True
             for j in range(i+1, len(endpoints)):
                 for endpoint2 in endpoints[j]:
-                    if np.linalg.norm(endpoint - endpoint2) < 0.05:
+                    if np.linalg.norm(endpoint - endpoint2) < 0.2:
                         flag = False
                         break
             if flag:
@@ -352,6 +352,10 @@ def compute_corner_orientation(laser_data, filtered_endpoints, neighborhood_radi
             angle2 = np.arctan2(minimum_principal_direction2[1], minimum_principal_direction2[0])
 
             bearing = ((angle1 + angle2) / 2 + np.pi )
+
+            # Compute angle between the two principal directions
+            if np.abs(np.min([np.abs(angle1 - angle2), np.abs(angle2 - angle1)]) - np.pi/2) > 0.4:
+                continue
             oriented_corners.append([endpoint, bearing, angle1, angle2])
         except:
             continue
@@ -383,43 +387,44 @@ def convert_position_to_range_bearing(oriented_corners):
         observations.append(np.array([d, theta, signature]))
     return observations
 
-def get_features(laser_data):
-    """
-    Get the corner features from the laser data.
-    Returns features as observations on the form (d, theta, signature). 
-    The signature is given as the bearing of the corner. 
-    """
-    # Find all line segments
-    line_segments, unmatched_points = find_all_line_segments(laser_data, 0.05, 0.05, 4, 4, 0.2, 4)
+def _get_features(laser_data):  
+    line_segments, unmatched_points = find_all_line_segments(laser_data, 0.05, 0.05, 6, 6, 0.2, 6)
     line_segments = overlap_region_processing(laser_data, line_segments)
     line_segments = endpoint_coordinates(line_segments)
     # Get endpoints from line segments
     endpoints = [line[3] for line in line_segments]
     # Remove duplicate endpoints
     endpoints_without_duplicates = remove_duplicate_endpoints(endpoints)
+    # Only look at laser data that is associated with an line segment
+
+    filtered_laser_data = []
+    for line in line_segments:
+        filtered_laser_data.append(line[0])
+    filtered_laser_data = np.concatenate(filtered_laser_data)
+
     # Filter endpoints by eigenvalue ratio
-    filtered_endpoints = filter_endpoints_by_eigenvalue_ratio(laser_data, endpoints_without_duplicates)
+    filtered_endpoints = filter_endpoints_by_eigenvalue_ratio(filtered_laser_data, endpoints_without_duplicates, neighborhood_radius=0.4)
     # Compute the orientation of the corners
-    oriented_corners = compute_corner_orientation(laser_data, filtered_endpoints)
-    return convert_position_to_range_bearing(oriented_corners)
+    oriented_corners = compute_corner_orientation(filtered_laser_data, filtered_endpoints)
+    return oriented_corners
+
+def get_features(laser_data):
+    """
+    Get the corner features from the laser data.
+    Returns features as observations on the form (d, theta, signature). 
+    The signature is given as the bearing of the corner. 
+    """
+    return convert_position_to_range_bearing(_get_features(laser_data))
 
 if __name__ == "__main__":
     # Testing 
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    for frame in range(80,100):
+    for frame in range(40,100):
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
         pointcloud = filter_points(pointcloud)
 
-        line_segments, unmatched_points = find_all_line_segments(pointcloud, 0.05, 0.05, 4, 4, 0.2, 4)
-        #print(len(line_segments))
-        # line_segments = overlap_region_processing(pointcloud, line_segments)
-        line_segments = endpoint_coordinates(line_segments)
-        endpoints = [line[3] for line in line_segments]
-        endpoints_without_duplicates = remove_duplicate_endpoints(endpoints)
-        filtered_endpoints = filter_endpoints_by_eigenvalue_ratio(pointcloud, endpoints_without_duplicates)
-        # filtered_endpoints = filter_endpoints_by_harris_measure(pointcloud, endpoints_without_duplicates)
-        oriented_corners = compute_corner_orientation(pointcloud, filtered_endpoints)
+        oriented_corners = _get_features(pointcloud)
         plot_oriented_corners(pointcloud, oriented_corners)
         # plot_all_line_segments(line_segments, unmatched_points)
