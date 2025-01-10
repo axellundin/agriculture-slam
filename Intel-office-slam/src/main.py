@@ -36,10 +36,9 @@ class SLAM:
                 continue
 
             landmarks = get_features(pointcloud)
-            self.slam.incremental_maximum_likelihood(landmarks)
 
             if self.last_odometry is not None:
-                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update=True)
+                self.slam.iteration(self.last_odometry, self.pointclouds[-1], pointcloud, perform_icp_update = False, detected_landmarks = landmarks)
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
             
@@ -49,7 +48,7 @@ class SLAM:
                 self.mapper.draw_map(self.slam.means, features=features)
             plt.pause(0.001)  # Add small delay between frames
         self.mapper.interactive_off()
-        self.slam.create_file()
+        #self.slam.create_file()
         
     def test_file(self):
             

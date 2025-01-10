@@ -5,7 +5,7 @@ from icp_implementation import ICP
 class EKFSLAM:
     def __init__(self):
         self.N = int(0)
-        self.alpha = 1
+        self.alpha = 0.2
         
         self.means = []
         self.covariances = [np.zeros((3, 3))]
@@ -19,8 +19,7 @@ class EKFSLAM:
         self.Q_icp = np.diag([10000, 10000, 1])
         self.Q_landmarks = np.eye(3)
         self.Mahalanobis_threshold = 1 #for outlier detection
-        self.R = np.eye(6)     
-        self.map = []
+        self.R = np.eye(6)
     
     def iteration(self, odometry_data, points_cloud1, points_cloud2, perform_icp_update = True, detected_landmarks = None):
         self.prediction_step(odometry_data)
@@ -28,7 +27,9 @@ class EKFSLAM:
             self.icp_measurement(points_cloud1, points_cloud2)
             self.icp_update_step() 
         if detected_landmarks is not None:
-            self.incremental_maximum_likelihood(detected_landmarks)
+            if len(detected_landmarks) != 0:
+                print(f"detected landmarks: {detected_landmarks}")
+                self.incremental_maximum_likelihood(detected_landmarks)
         
     def prediction_step(self, odometry_data):
         """ Performs the dynamic model of the EKFSLAM.
@@ -45,10 +46,11 @@ class EKFSLAM:
         delta_x = float(odometry_data[0])
         delta_y = float(odometry_data[1])
         delta_th = float(odometry_data[2])
-        print("Odometry")
-        print(delta_x, delta_y, delta_th)
+        #print(f"Odometry: {delta_x, delta_y, delta_th}")
+        #print(delta_x, delta_y, delta_th)
         A = - (delta_x * s + delta_y * c)
         B = delta_x * c - delta_y * s
+        Fx = np.hstack([np.eye(6), np.zeros((6, 3 * self.N))])
         
         G_small = np.array([[1, 0, A, 0, 0, 0],
                             [0, 1, B, 0, 0, 0],
@@ -56,8 +58,10 @@ class EKFSLAM:
                             [1, 0, 0, 0, 0, 0],
                             [0, 1, 0, 0, 0, 0],
                             [0, 0, 1, 0, 0, 0]])
-        #print(mean)
-        G = np.zeros((6+2*self.N, 6+2*self.N)) #covariances to zero?
+        
+        #print(f"N = {self.N}")
+        #G = np.zeros((6+3*self.N, 6+3*self.N))
+        G = np.eye(6+3*self.N)
         G[0:6, 0:6] = G_small
         new_pose = np.zeros(6)
         new_pose[0:3] = mean[0:3]
@@ -65,10 +69,13 @@ class EKFSLAM:
         new_pose[0] = new_pose[0] + delta_x * c - delta_y * s
         new_pose[1] = new_pose[1] + delta_y * c + delta_x * s
         new_pose[2] = new_pose[2] + delta_th
-        new_covariance = G @ covariance @ G.T + self.R
+        # print(f"Sigma = {covariance}]")
+        # print(f"G = {G}]")
+        new_covariance = G @ covariance @ G.T + Fx.T @ self.R @ Fx
         
         self.odometry.append(np.array(odometry_data, dtype=float))
-        self.means.append(new_pose) #wrong
+        self.means.append(self.means[-1])
+        self.means[-1][0:6] = new_pose
         self.covariances.append(new_covariance)
         
     def icp_measurement(self, points_cloud1, points_cloud2):
@@ -85,26 +92,27 @@ class EKFSLAM:
                       [0, 0, 1]])
         self.icp_transforms.append(M)
         z = np.array([t[0], t[1], np.atan2(R[1,0], R[0,0])])
-        print("ICP:")
-        print(z)
+        #print(f"ICP: {z}")
         self.icp_measurements.append(z)
   
     def icp_update_step(self):
         Sigma = self.covariances[-1]
         mu = self.means[-1]
         H_small = self.H_icp
-        H = np.hstack((H_small, np.zeros((3, 2*self.N))))
+        H = np.hstack((H_small, np.zeros((3, 3*self.N))))
+        #Fx = np.hstack([np.eye(3), np.zeros((3, 3 + 3 * self.N))])
         Q = self.Q_icp
+        # print(f"H: {H}")
+        # print(f"Sigma: {Sigma}")
+        # print(f"Q: {Q}")
         K = Sigma @ H.T @ np.linalg.inv(H @ Sigma @ H.T + Q)
         self.kalman_gains_icp.append(K)
         self.predicted_measurements_icp.append(self.odometry[-1])
         eta = self.icp_measurements[-1] - self.predicted_measurements_icp[-1]
         self.innovations.append(eta)
-        print(f"Innovation: {eta}")
-        print(f"")
         
         mu = mu + K @ eta
-        Sigma = (np.eye(6) - K @ H) @ Sigma
+        Sigma = (np.eye(len(mu)) - K @ H) @ Sigma
         
         self.means.append(mu)
         self.covariances.append(Sigma)
@@ -120,30 +128,48 @@ class EKFSLAM:
         H_i = []
         for i in range(len(detected_landmarks)):
             z = detected_landmarks[i]
-            map = self.map
-            x_lm = mu[0] + z[0] * np.cos(z[1] + mu[2])
-            y_lm = mu[1] + z[0] * np.sin(z[1] + mu[2])
+            map = self.means[-1][6:]
+            cos = np.cos(z[1] + mu[2])
+            sin = np.sin(z[1] + mu[2])
+            x_lm = mu[0] + z[0] * cos
+            y_lm = mu[1] + z[0] * sin
             s = z[2]
             lm = np.array([x_lm, y_lm, s])
-            map.append(lm)
-            #delta = np.zeros(2, len(map))
+            # Provisional extended state
+            # print(f"map: {map}")
+            # print(f"lm : {lm}")
+            map = np.hstack((map, lm))
+            N = int(len(map)/3)
+            # Provisional extended covariance
+            G_z = np.array([[cos, -z[0]*sin, 0],
+                            [sin, z[0]*cos, 0],
+                            [0, 0, 1]])
+            G_R = np.array([[1, 0, -z[0]*sin, 0, 0, 0],
+                            [0, 1, z[0]*cos, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0]])
+            Sigma_LL = G_R @ Sigma[0:6, 0:6] @ G_R.T + G_z @ Q @ G_z.T
+            Sigma_Lmu = G_R @ Sigma[0:6, :]
+            Sigma_right = np.vstack((Sigma_Lmu.T, Sigma_LL))
+            Sigma_prov = np.vstack((Sigma, Sigma_Lmu))
+            Sigma_prov = np.hstack((Sigma_prov, Sigma_right))
+            #delta = np.zeros(2, N)
             H_list = []
             Psi_list = []
-            Mahalanobis_distances = np.zeros(len(map))
+            Mahalanobis_distances = np.zeros(N)
             zhat = []
-            for k in range(len(map)):
-                delta_x = map[k][0] - mu[0]
-                delta_y = map[k][1] - mu[1]
-                # delta[0,k] = delta_x
-                # delta[1,k] = delta_y
-                # q = delta[:,k].T @ delta[:,k]
+            #print(f"Vector: {range(N)}")
+            for k in range(N):
+                # print(f"k: {k}")
+                # print(f"Signature: {map[k+2]}")
+                delta_x = map[k] - mu[0]
+                delta_y = map[k+1] - mu[1]
                 delta = np.array([delta_x, delta_y])
                 q = np.dot(delta, delta)
-                zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[k][2]]))
+                zhat.append(np.array([np.sqrt(q), np.atan2(delta_y, delta_x) - mu[2], map[k+2]]))
                 A = np.vstack([np.eye(3), np.zeros((3, 3))])
-                B = np.zeros((6, 2*(k+1) - 2))
+                B = np.zeros((6, 3*k + 3))
                 C = np.vstack([np.zeros((3,3)), np.eye(3)])
-                D = np.zeros((6, 2*(len(map)-k-1)))
+                D = np.zeros((6, 3*(N-k-1)))
                 Fx = np.hstack([A,B,C,D])
                 #print(Fx)
                 H = np.array([[np.sqrt(q)*delta_x, -np.sqrt(q)*delta_y, 0, -np.sqrt(q)*delta_x, np.sqrt(q)*delta_y, 0],
@@ -151,52 +177,71 @@ class EKFSLAM:
                              [0, 0, 0, 0, 0, 1]])
                 H = 1/q * H @ Fx
                 H_list.append(H)
-                print(H)
-                print(Sigma)
-                Psi_list.append(H @ Sigma @ H.T + Q)
+                # print(f"map: {map}")
+                # print(f"H: {H}")
+                # print(f"Sigma_prov: {Sigma_prov}")              
+                Psi_list.append(H @ Sigma_prov @ H.T + Q)
                 Mahalanobis_distances[k] = (z - zhat[k]).T @ np.linalg.inv(Psi_list[k]) @ (z - zhat[k])
             Mahalanobis_distances[-1] = self.alpha
             min_Mdist = 100000
-            for k in range(len(map)):
+            for k in range(N):
                 if not Mahalanobis_distances[k] > self.Mahalanobis_threshold: #Outlier detection
                     if Mahalanobis_distances[k] < min_Mdist:
                         min_Mdist = Mahalanobis_distances[k]
                         j[i] = k
-            self.N = max(self.N, j[i])
-            if self.N == j[i]:
-                print(f"Adding landmark")
-                self.map.append(lm)
+            # print(f"Before assigning: N = {N}, N_global = {self.N}, j = {j[i]}")
+            # self.N = max(self.N, j[i]+1)
+            # print(f"After assigning: N = {self.N}")
+            # if self.N == j[i]+1:
+            if j[i] + 1 > self.N:
+                print(f"Adding landmark to the state")
+                self.N = j[i] + 1
+                # extend the state
+                mu = np.hstack([mu, lm])             
+                # extend the covariance matrix
+                Sigma = Sigma_prov
+                # update the global variables
+                self.means[-1] = mu
+                self.covariances[-1] = Sigma
+            # print(f"After assigning: N = {self.N}")
+            # print(f"map: {self.means[-1][6:]}")
+                
             zhat_i.append(zhat[j[i]])
-            H_i.append(H_list[j[i]])
-            Psi_i = Psi_list[j[i]]
-            print(Psi_i)
+            #print(f"Before appending: {H_list[j[i]]}")
+            H_i.append(H_list[j[i]][:, 0:(6 + 3 * self.N)])
+            #print(f"After appending: {H_i[i]}")
+            Psi_i = H_i[i] @ Sigma @ H_i[i].T + Q
+            # print(f"Sigma: {Sigma}")
+            # print(f"H_i: {H_i[i]}")
             K_i.append(Sigma @ H_i[i].T @ np.linalg.inv(Psi_i))
-
-
-        update_mean = np.zeros(len(mu))
-        update_cov = np.zeros(Sigma.shape)
-
-
-        for i in range(len(detected_landmarks)):
-            delta_mean = K_i[i] @ (zhat_i[i] - detected_landmarks[i])
-            delta_cov = K_i[i]@H_i[i]
-            if len(delta_mean) > len(update_mean):
-                np.append(update_mean, 0)
-                np.append(mu, 0)
-            if np.size(delta_cov) > np.size(update_cov):
-                # Append a column of zeros
-                update_cov = np.hstack(( update_cov, np.zeros((np.size(update_cov, 0), 1)) ))
-                Sigma = np.hstack(( Sigma, np.zeros((np.size(Sigma, 0), 1)) ))
-                # Append a row of zeros
-                update_cov = np.vstack(( update_cov, np.zeros((1, np.size(update_cov, 1))) ))
-                Sigma = np.vstack(( Sigma, np.zeros((1, np.size(Sigma, 1))) ))
-            update_mean = update_mean + delta_mean
-            update_cov = update_cov + delta_cov
+            #print(f"K_i = {K_i[i]}")
         
-        self.means[-1] = mu + update_mean
-        print(f"Sigma: {Sigma}")
-        self.covariances[-1] = ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma
-        print(f"Update Cov: {self.covariances[-1]}")
+        update_mean = np.zeros((len(mu)))
+        update_cov = np.zeros(Sigma.shape)
+        
+        for i in range(len(detected_landmarks)):
+            sz = np.size(K_i[i], 0)
+            # print(f"mu: {mu}, {len(mu)=}")
+            
+            # print(f"sz : {sz}")
+            # print(f"Result of te operation: {K_i[i] @ (detected_landmarks[i] - zhat_i[i])}")
+            # print(f"Left side: {update_mean[0:sz]}")
+            update_mean[0:sz] += K_i[i] @ (detected_landmarks[i] - zhat_i[i])
+            #print(f"K_i: {K_i[i]}")
+            #print(f"H_i: {H_i[i]}")
+            #print(f"Sigma: {Sigma}")
+            #print(f"map: {map}")
+            #print(f"update_cov: {update_cov}")
+            # print(f"i = {i}")
+            # print(f"K_i: {K_i[i]}")
+            update_cov[0:sz, 0:sz] += K_i[i] @ H_i[i]
+        
+        self.means.append(mu + update_mean)
+        print(f"Update: {self.means[-1][0:3]}")
+        print(f"Map: {self.means[-1][3:]}")
+        #print(f"Sigma: {Sigma}")
+        self.covariances.append( ( np.eye(np.size(Sigma, 0)) - update_cov ) @ Sigma )
+        #print(f"Update Cov: {self.covariances[-1]}")
     
     def plot_results(self):
         # Process odometry data to compute the trajectory
