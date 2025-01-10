@@ -8,6 +8,7 @@ from mapping import Mapper
 from ekfslam import EKFSLAM
 from landmark_tracking import LandmarkTracker
 from feature_detection import get_features, feature_detection
+from plot_subresult import plot_map_from_file, create_file
 
 class SLAM:
     def __init__(self, laser_data_path: str, odometry_data_path: str):
@@ -71,10 +72,11 @@ class SLAM:
             self.last_odometry = odometry_frame
             self.pointclouds.append(pointcloud)
                 
-        # self.slam.create_file()
-        # self.slam.plot_results_from_file()
+        create_file(self.slam.odometry, self.slam.means, self.pointclouds)
+        # plot_map_from_file(self.slam.odometry, self.slam.means, self.pointclouds)
+        # # self.slam.plot_results_from_file()
 
 if __name__ == "__main__":
     slam = SLAM("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    slam.run()
-    # slam.test_file()
+    # slam.run()
+    slam.test_file()

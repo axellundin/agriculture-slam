@@ -406,7 +406,7 @@ if __name__ == "__main__":
     # Testing 
     # Get pointcloud from the data player 
     data_player = DataPlayer("../dataset_intel/intel_LASER_.txt", "../dataset_intel/intel_ODO.txt")
-    for frame in range(145,200):
+    for frame in range(80,83):
         laser_data, _ = data_player.get_frame(frame)
         pointcloud = lidar_to_points(laser_data)
         pointcloud = filter_points(pointcloud)
